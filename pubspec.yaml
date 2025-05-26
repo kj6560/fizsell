@@ -1,0 +1,58 @@
+name: fizsell
+description: "Fizsell application"
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  flutter_bloc:
+  dio:
+  equatable:
+  flutter_secure_storage:
+  package_info_plus:
+  hive_flutter:
+  email_validator:
+  path_provider:
+  image_gallery_saver_plus:
+  permission_handler:
+  http:
+  mobile_scanner:
+  font_awesome_flutter:
+  image_picker:
+  print_bluetooth_thermal:
+  url_launcher:
+  intl:
+  cached_network_image:
+  mobile_device_identifier:
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.4.0
+
+flutter:
+  uses-material-design: true
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logo.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path:  "assets/logo.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path:  "assets/logo.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path:  "assets/logo.png"
