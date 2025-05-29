@@ -1,3 +1,5 @@
+import 'package:fizsell/core/config/base_url.dart';
+import 'package:fizsell/core/config/endpoints.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fizsell/core/widgets/base_screen.dart';
@@ -80,6 +82,7 @@ class ProductsList extends WidgetView<ProductsList, ProductsListControllerState>
                           : ListView.builder(
                         itemCount: filteredProducts.length,
                         itemBuilder: (context, index) {
+
                           Product product = filteredProducts[index];
                           return InkWell(
                             onTap: () {
@@ -90,68 +93,90 @@ class ProductsList extends WidgetView<ProductsList, ProductsListControllerState>
                               );
                             },
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12.0, vertical: 6.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
                               child: Card(
                                 elevation: 4,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(16),
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Row(
                                     children: [
-                                      Text(
-                                        product.name,
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w600,
+                                      // 🖼 Product Image
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Image.network(
+                                          (product.images != null &&
+                                              product.images.isNotEmpty &&
+                                              product.images[0].isNotEmpty)
+                                              ? picBaseUrl+"/"+product.images[0]
+                                              : 'https://via.placeholder.com/80',
+                                          width: 80,
+                                          height: 80,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (context, error, stackTrace) {
+                                            return Container(
+                                              width: 80,
+                                              height: 80,
+                                              color: Colors.grey[300],
+                                              child: const Icon(Icons.broken_image, size: 40, color: Colors.grey),
+                                            );
+                                          },
                                         ),
                                       ),
-                                      const SizedBox(height: 8),
-                                      Row(
-                                        children: [
-                                          Icon(Icons.qr_code,
-                                              size: 18,
-                                              color: Colors.grey[700]),
-                                          const SizedBox(width: 6),
-                                          Text(
-                                            "SKU: ",
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.grey[800],
+                                      const SizedBox(width: 12),
+                                      // 📄 Product Details
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              product.name,
+                                              style: const TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w600,
+                                              ),
                                             ),
-                                          ),
-                                          Flexible(
-                                            child: Text(
-                                              product.sku,
-                                              style:
-                                              const TextStyle(fontSize: 16),
-                                              overflow:
-                                              TextOverflow.ellipsis,
+                                            const SizedBox(height: 6),
+                                            Row(
+                                              children: [
+                                                Icon(Icons.qr_code, size: 16, color: Colors.grey[700]),
+                                                const SizedBox(width: 4),
+                                                Text(
+                                                  "SKU: ",
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.grey[800],
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                    product.sku,
+                                                    style: const TextStyle(fontSize: 14),
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 6),
-                                      Row(
-                                        children: [
-                                          Icon(Icons.currency_rupee,
-                                              size: 18,
-                                              color: Colors.green[700]),
-                                          const SizedBox(width: 6),
-                                          Text(
-                                            "${product.productMrp}",
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.green[800],
+                                            const SizedBox(height: 4),
+                                            Row(
+                                              children: [
+                                                Icon(Icons.currency_rupee, size: 16, color: Colors.green[700]),
+                                                const SizedBox(width: 4),
+                                                Text(
+                                                  "${product.productMrp}",
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.green[800],
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -160,6 +185,7 @@ class ProductsList extends WidgetView<ProductsList, ProductsListControllerState>
                             ),
                           );
                         },
+
                       ),
                     ),
                   ],

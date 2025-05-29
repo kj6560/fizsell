@@ -27,7 +27,15 @@ class NewCustomerController extends StatefulWidget {
 class NewCustomerControllerState extends State<NewCustomerController> {
   String name = "";
   String email = "";
+  // Controller variables
+  String? selectedCustomerType;
+  final List<String> customerTypeItems = ['1', '2'];
 
+  void updateCustomerType(String? newType) {
+    setState(() {
+      selectedCustomerType = newType;
+    });
+  }
   @override
   void initState() {
     // TODO: implement initState
@@ -79,6 +87,7 @@ class NewCustomerControllerState extends State<NewCustomerController> {
         customer_address: customer_address,
         customer_phone_number: customer_phone_number,
         customer_image: customer_image!,
+        customer_type: int.parse(selectedCustomerType!),
         customer_active: customer_active));
   }
 

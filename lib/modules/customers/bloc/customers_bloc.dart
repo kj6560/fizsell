@@ -55,6 +55,7 @@ class CustomersBloc extends Bloc<CustomersEvent, CustomersState> {
           customerPhoneNumber: "",
           customerPic: "customerPic",
           customerActive: 1,
+          customerType: 0,
           createdAt: "createdAt",
           updatedAt: "updatedAt");
       customers.insert(0, falseCustomer);
@@ -84,6 +85,7 @@ class CustomersBloc extends Bloc<CustomersEvent, CustomersState> {
       User user = User.fromJson(jsonDecode(userString));
       print('user org id: ${user.orgId}');
       int customer_id = event.customer_id;
+      print("customer id: ${customer_id}");
       final response = await customerRepositoryImpl
           .fetchCustomers(user.orgId!, token, customerId: customer_id);
       if (response == null || response.data == null) {
@@ -98,6 +100,7 @@ class CustomersBloc extends Bloc<CustomersEvent, CustomersState> {
       print(data);
 
       Customer customer = Customer.fromJson(data);
+
       if (response.statusCode == 401) {
         emit(LoadCustomersFailure("Login failed."));
         return;
@@ -165,7 +168,7 @@ class CustomersBloc extends Bloc<CustomersEvent, CustomersState> {
       String customer_phone_number = event.customer_phone_number;
       File customer_image = event.customer_image;
       int customer_active = event.customer_active;
-
+      int customer_type = event.customer_type;
       final response = await customerRepositoryImpl.createCustomers(
           user.orgId!,
           customer_name,
@@ -173,6 +176,7 @@ class CustomersBloc extends Bloc<CustomersEvent, CustomersState> {
           customer_phone_number,
           customer_image,
           customer_active,
+          customer_type,
           token);
       if (response == null || response.data == null) {
         emit(NewCustomerCreateFailure("No response from server"));
@@ -212,6 +216,7 @@ class CustomersBloc extends Bloc<CustomersEvent, CustomersState> {
       String customer_phone_number = event.customer_phone_number;
       File? customer_image = event.customer_image;
       int customer_active = event.customer_active;
+      int customer_type = event.customer_type;
 
       final response = await customerRepositoryImpl.updateCustomers(
           user.orgId!,
@@ -221,6 +226,7 @@ class CustomersBloc extends Bloc<CustomersEvent, CustomersState> {
           customer_phone_number,
           customer_image,
           customer_active,
+          customer_type,
           token);
       if (response == null || response.data == null) {
         emit(NewCustomerCreateFailure("No response from server"));

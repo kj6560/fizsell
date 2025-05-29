@@ -14,6 +14,7 @@ class Customer {
   String customerPhoneNumber;
   String customerPic;
   int customerActive;
+  int customerType;
   String createdAt;
   String updatedAt;
 
@@ -25,6 +26,7 @@ class Customer {
     required this.customerPhoneNumber,
     required this.customerPic,
     required this.customerActive,
+    required this.customerType,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -38,6 +40,7 @@ class Customer {
       customerPhoneNumber: json["customer_phone_number"],
       customerPic: json["customer_pic"],
       customerActive: int.parse(json["customer_active"].toString()),
+      customerType: int.parse(json['customer_type']),
       createdAt: json["created_at"],
       updatedAt: json["updated_at"],
     );

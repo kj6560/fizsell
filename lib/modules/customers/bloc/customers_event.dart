@@ -27,12 +27,14 @@ class NewCustomerCreate extends CustomersEvent {
   final String customer_phone_number;
   final int customer_active;
   final File customer_image;
+  final int customer_type;
 
   const NewCustomerCreate(
       {required this.customer_name,
       required this.customer_address,
       required this.customer_phone_number,
       required this.customer_image,
+        required this.customer_type,
       required this.customer_active});
 }
 
@@ -43,6 +45,7 @@ class UpdateCustomer extends CustomersEvent {
   final String customer_phone_number;
   final int customer_active;
   final File? customer_image;
+  final int customer_type;
 
   const UpdateCustomer(
       {required this.id,
@@ -50,5 +53,6 @@ class UpdateCustomer extends CustomersEvent {
       required this.customer_address,
       required this.customer_phone_number,
       this.customer_image,
+        required this.customer_type,
       required this.customer_active});
 }

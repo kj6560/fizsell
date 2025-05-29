@@ -14,9 +14,11 @@ class CustomerRepositoryImpl {
       {int customerId = 0}) async {
     try {
       var body = {'org_id': org_id};
+
       if (customerId != 0) {
         body['customer_id'] = customerId;
       }
+      print("payload: ${jsonEncode(body)}");
       Response response = await dio.get(
         EndPoints.fetchCustomers,
         options: Options(
@@ -69,8 +71,11 @@ class CustomerRepositoryImpl {
     String customer_phone_number,
     File customer_image,
     int customer_active,
+    int customer_type,
     String token,
+
   ) async {
+    print("customer type: ${customer_type}");
     try {
       FormData formData = FormData.fromMap({
         'org_id': org_id,
@@ -78,12 +83,12 @@ class CustomerRepositoryImpl {
         'customer_address': customer_address,
         'customer_phone_number': customer_phone_number,
         'customer_active': customer_active,
+        'customer_type':customer_type,
         'customer_image': await MultipartFile.fromFile(
           customer_image.path,
           filename: customer_image.path.split('/').last,
         ),
       });
-
       Response response = await Dio().post(
         EndPoints.newCustomer,
         options: Options(
@@ -113,6 +118,7 @@ class CustomerRepositoryImpl {
     String customer_phone_number,
     File? customer_image,
     int customer_active,
+    int customer_type,
     String token,
   ) async {
     try {
@@ -122,6 +128,7 @@ class CustomerRepositoryImpl {
         'customer_name': customer_name,
         'customer_address': customer_address,
         'customer_phone_number': customer_phone_number,
+        'customer_type':customer_type,
         'customer_active': customer_active,
       });
       if (customer_image != null) {

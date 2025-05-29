@@ -13,6 +13,9 @@ class NewProduct extends WidgetView<NewProduct, NewProductControllerState> {
           if (state is GenerateBarcodeSuccess) {
             controllerState.onBarcodeGenerated(state);
           }
+          if(state is AddProductSuccess){
+            controllerState.onAddProductSuccess(state);
+          }
         },
         builder: (context, state) {
           if (state is LoadingProductUom) {

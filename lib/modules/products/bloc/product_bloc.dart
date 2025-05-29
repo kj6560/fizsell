@@ -40,7 +40,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         emit(LoadProductListFailure("No response from server"));
         return;
       }
-
+      print(response);
       // Ensure data is always a Map<String, dynamic>
       final data = response.data['data'] is String
           ? jsonDecode(response.data['data'])
@@ -87,14 +87,12 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       final data = response.data['data'] is String
           ? jsonDecode(response.data['data'])
           : response.data['data'];
-      print(data);
-      final Product product = Product.fromJson(data);
-
+      print("created product${data}");
       if (response.statusCode == 401) {
         emit(AddProductFailure("Login failed."));
         return;
       }
-      emit(AddProductSuccess(product));
+      emit(AddProductSuccess());
     } catch (e, stacktrace) {
       print('Exception in bloc: $e');
       print('Stacktrace: $stacktrace');
@@ -219,13 +217,11 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       final data = response.data['data'] is String
           ? jsonDecode(response.data['data'])
           : response.data['data'];
-      print(data['barcode_url']);
-      Product deletedProduct = Product.fromJson(data);
       if (response.statusCode == 401) {
         emit(DeleteProductFailure("Login failed."));
         return;
       }
-      emit(DeleteProductSuccess(deletedProduct));
+      emit(DeleteProductSuccess());
     } catch (e, stacktrace) {
       print('Exception in bloc: $e');
       print('Stacktrace: $stacktrace');

@@ -18,9 +18,7 @@ class LoadProductListFailure extends ProductState {
 }
 
 class AddProductSuccess extends ProductState {
-  final Product response;
-
-  AddProductSuccess(this.response);
+  AddProductSuccess();
 }
 
 class AddProductFailure extends ProductState {
@@ -80,9 +78,8 @@ class GenerateBarcodeFailure extends ProductState {
 class GeneratingBarcode extends ProductState {}
 
 class DeleteProductSuccess extends ProductState {
-  final Product product;
 
-  DeleteProductSuccess(this.product);
+  DeleteProductSuccess();
 }
 
 class DeleteProductFailure extends ProductState {

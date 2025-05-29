@@ -29,7 +29,14 @@ class EditCustomerControllerState extends State<EditCustomerController> {
   String name = "";
   String email = "";
   int customer_id = 0;
+  String? selectedCustomerType;
+  final List<String> customerTypeItems = ['1', '2'];
 
+  void updateCustomerType(String? newType) {
+    setState(() {
+      selectedCustomerType = newType;
+    });
+  }
   @override
   void initState() {
     // TODO: implement initState
@@ -120,11 +127,13 @@ class EditCustomerControllerState extends State<EditCustomerController> {
       customer_phone_number: customer_phone_number,
       customer_image: customer_image,
       customer_active: customer_active,
+      customer_type: int.parse(selectedCustomerType!)
     ));
   }
 
   @override
   Widget build(BuildContext context) {
+    print("editing customer");
     return EditCustomerScreen(this);
   }
 
@@ -139,6 +148,7 @@ class EditCustomerControllerState extends State<EditCustomerController> {
       customerAddressController.text = customer!.customerAddress;
       customerPhoneNumberController.text = customer!.customerPhoneNumber;
       selectedValue = customer!.customerActive == 1 ? "YES" : "NO";
+      selectedCustomerType = _customer.customerType.toString();
     });
   }
 }

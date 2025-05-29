@@ -28,6 +28,7 @@ class ProductRepositoryImpl {
         ),
         data: jsonEncode(body),
       );
+      print(response.data);
       return response;
     } catch (e, stacktrace) {
       print(e.toString());
@@ -84,7 +85,7 @@ class ProductRepositoryImpl {
       // Add images to formData
       for (int i = 0; i < selectedImages.length; i++) {
         formData.files.add(MapEntry(
-          'image_path[]', // Or 'image_path' depending on your backend
+          'images[]', // Or 'image_path' depending on your backend
           await MultipartFile.fromFile(
             selectedImages[i].path,
             filename: selectedImages[i].path.split('/').last,

@@ -17,7 +17,7 @@ class Product {
   double productMrp;
   double? basePrice;
   int isActive;
-  String? image_path;
+  List<String> images;
   String createdAt;
   String updatedAt;
   ProductPrice? price;
@@ -32,7 +32,7 @@ class Product {
     required this.productMrp,
     required this.isActive,
     required this.basePrice,
-     this.image_path,
+    required this.images,
     this.createdAt = "",
     this.updatedAt = "",
     required this.price,
@@ -43,15 +43,17 @@ class Product {
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
       id: json['id'],
-      orgId: json['org_id'] ?? 0,
+      orgId: json['org_id'],
       name: json['name'],
-      sku: json['sku'],
+      sku: json['sku'].toString(),
       productMrp: double.parse(json['product_mrp'].toString()),
       basePrice: json['base_price'] != null
           ? double.tryParse(json['base_price'].toString())
           : null,
       isActive: json['is_active'],
-      image_path: json['image_path'],
+      images: (json['images'] is List)
+          ? List<String>.from(json['images'])
+          : [],
       createdAt: json['created_at'] ?? "",
       updatedAt: json['updated_at'] ?? "",
       price:
@@ -77,6 +79,7 @@ class Product {
       'updated_at': updatedAt,
       'price': price?.toJson(),
       'uom': uom?.toJson(),
+      'images': images,
       'schemes': schemes != null
           ? List<dynamic>.from(schemes.map((x) => x.toJson()))
           : [],

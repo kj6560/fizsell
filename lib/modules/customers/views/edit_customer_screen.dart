@@ -8,7 +8,7 @@ class EditCustomerScreen
   Widget build(BuildContext context) {
     // TODO: implement build
     return BaseScreen(
-      title: "New Customer",
+      title: "Editing Customer",
 
       body: BlocConsumer<CustomersBloc, CustomersState>(
           listener: (context, state) {
@@ -82,6 +82,31 @@ class EditCustomerScreen
                         padding: const EdgeInsets.all(8.0),
                         child: DropdownButtonFormField<String>(
                           decoration: InputDecoration(
+                            labelText: 'Select Customer Type',
+                            border: OutlineInputBorder(),
+                          ),
+                          value: controllerState.selectedCustomerType,
+                          items: controllerState.customerTypeItems.map((String type) {
+                            return DropdownMenuItem<String>(
+                              value: type,
+                              child: Text(type == '1' ? 'Retailer' : 'Distributor'), // Optional display
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            controllerState.updateCustomerType(newValue);
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please select customer type';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: DropdownButtonFormField<String>(
+                          decoration: InputDecoration(
                             labelText: 'Select Customer Active',
                             border: OutlineInputBorder(),
                           ),
@@ -137,7 +162,7 @@ class EditCustomerScreen
                 ),
               ),
               Center(
-                child: Text("Creating Customer..."),
+                child: Text("Editing Customer..."),
               )
             ],
           ),

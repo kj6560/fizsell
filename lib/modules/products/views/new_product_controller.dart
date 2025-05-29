@@ -106,8 +106,6 @@ class NewProductControllerState extends State<NewProductController> {
           selectedImages: selectedImages
         ),
       );
-
-      Navigator.popAndPushNamed(context, "/home");
     }
   }
 
@@ -223,4 +221,8 @@ class NewProductControllerState extends State<NewProductController> {
 
   @override
   Widget build(BuildContext context) => NewProduct(this);
+
+  void onAddProductSuccess(AddProductSuccess state) {
+    Navigator.pushReplacementNamed(context, "/list_product");
+  }
 }
