@@ -82,14 +82,14 @@ class NewUser extends WidgetView<NewUser, NewUserControllerState> {
         },
         listener: (context, state) {
           if (state is CreateUserSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
             controllerState.clearFormFields();
           } else if (state is CreateUserFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error)),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.error)));
           }
         },
       ),
@@ -109,6 +109,18 @@ class NewUser extends WidgetView<NewUser, NewUserControllerState> {
       decoration: InputDecoration(
         labelText: label,
         border: OutlineInputBorder(),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(
+            color: Colors.grey,
+          ), // Change this to your desired color
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(
+            color: Color(0xFFB5A13F),
+          ), // Color when focused
+        ),
       ),
     );
   }
@@ -137,7 +149,21 @@ class NewUser extends WidgetView<NewUser, NewUserControllerState> {
                   )
                   .toList(),
           onChanged: onChanged,
-          decoration: InputDecoration(border: OutlineInputBorder()),
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(
+                color: Colors.grey,
+              ), // Change this to your desired color
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(
+                color: Color(0xFFB5A13F),
+              ), // Color when focused
+            ),
+          ),
         ),
       ],
     );

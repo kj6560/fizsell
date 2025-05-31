@@ -85,6 +85,18 @@ class NewSaleScreen extends WidgetView<NewSaleScreen, NewSaleControllerState> {
               decoration: InputDecoration(
                 labelText: 'Select Payment Mode',
                 border: OutlineInputBorder(),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                  ), // Change this to your desired color
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFB5A13F),
+                  ), // Color when focused
+                ),
               ),
               value: controllerState.selectedValue,
               items: controllerState.dropdownItems.map((String item) {
@@ -102,6 +114,18 @@ class NewSaleScreen extends WidgetView<NewSaleScreen, NewSaleControllerState> {
               decoration: InputDecoration(
                 labelText: 'Select Customer',
                 border: OutlineInputBorder(),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                  ), // Change this to your desired color
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFB5A13F),
+                  ), // Color when focused
+                ),
               ),
               value: controllerState.selectedUser,
               items: customers.map((Customer customer) {
@@ -268,6 +292,18 @@ class NewSaleScreen extends WidgetView<NewSaleScreen, NewSaleControllerState> {
                   decoration: InputDecoration(
                     labelText: "Quantity",
                     border: OutlineInputBorder(),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                      ), // Change this to your desired color
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(
+                        color: Color(0xFFB5A13F),
+                      ), // Color when focused
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -279,6 +315,18 @@ class NewSaleScreen extends WidgetView<NewSaleScreen, NewSaleControllerState> {
                   decoration: InputDecoration(
                     labelText: "Discount",
                     border: OutlineInputBorder(),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                      ), // Change this to your desired color
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(
+                        color: Color(0xFFB5A13F),
+                      ), // Color when focused
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -290,6 +338,18 @@ class NewSaleScreen extends WidgetView<NewSaleScreen, NewSaleControllerState> {
                   decoration: InputDecoration(
                     labelText: "Tax",
                     border: OutlineInputBorder(),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                      ), // Change this to your desired color
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(
+                        color: Color(0xFFB5A13F),
+                      ), // Color when focused
+                    ),
                   ),
                 )
               ],

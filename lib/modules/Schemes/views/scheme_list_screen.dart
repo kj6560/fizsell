@@ -45,6 +45,18 @@ class SchemeListScreen
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                            ), // Change this to your desired color
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(
+                              color: Color(0xFFB5A13F),
+                            ), // Color when focused
+                          ),
                         ),
                         onChanged: (value) {
                           value = value.toLowerCase();
@@ -69,7 +81,7 @@ class SchemeListScreen
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 12, vertical: 6),
                                   child: Card(
-                                    elevation: 4,
+                                    elevation: 1,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(16),
                                     ),

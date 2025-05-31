@@ -62,28 +62,43 @@ class CustomersListScreen
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        controller: searchController,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.search),
-                          hintText: 'Search by name or phone',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextField(
+                          controller: searchController,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.search),
+                            hintText: 'Search by name or phone',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Colors.grey,
+                              ), // Change this to your desired color
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Color(0xFFB5A13F),
+                              ), // Color when focused
+                            ),
                           ),
+                          onChanged: (value) {
+                            value = value.toLowerCase();
+                            setState(() {
+                              filteredCustomers = allCustomers.where((customer) {
+                                return customer.customerName
+                                        .toLowerCase()
+                                        .contains(value) ||
+                                    customer.customerPhoneNumber
+                                        .toLowerCase()
+                                        .contains(value);
+                              }).toList();
+                            });
+                          },
                         ),
-                        onChanged: (value) {
-                          value = value.toLowerCase();
-                          setState(() {
-                            filteredCustomers = allCustomers.where((customer) {
-                              return customer.customerName
-                                      .toLowerCase()
-                                      .contains(value) ||
-                                  customer.customerPhoneNumber
-                                      .toLowerCase()
-                                      .contains(value);
-                            }).toList();
-                          });
-                        },
                       ),
                     ),
                     Expanded(
@@ -97,7 +112,7 @@ class CustomersListScreen
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 12, vertical: 6),
                                   child: Card(
-                                    elevation: 4,
+                                    elevation: 1,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(16),
                                     ),

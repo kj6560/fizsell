@@ -46,9 +46,21 @@ class NewProduct extends WidgetView<NewProduct, NewProductControllerState> {
                     /// Product Name Field
                     TextFormField(
                       controller: controllerState.nameController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Enter Product Name',
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                          ), // Change this to your desired color
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFB5A13F),
+                          ), // Color when focused
+                        ),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -62,9 +74,21 @@ class NewProduct extends WidgetView<NewProduct, NewProductControllerState> {
                     /// Product MRP Field
                     TextFormField(
                       controller: controllerState.priceController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Enter Product MRP',
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                          ), // Change this to your desired color
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFB5A13F),
+                          ), // Color when focused
+                        ),
                       ),
                       keyboardType: TextInputType.number,
                       validator: (value) {
@@ -79,9 +103,21 @@ class NewProduct extends WidgetView<NewProduct, NewProductControllerState> {
                     /// Product Base Price Field
                     TextFormField(
                       controller: controllerState.basePriceController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Enter Product Base Price',
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                          ), // Change this to your desired color
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFB5A13F),
+                          ), // Color when focused
+                        ),
                       ),
                       keyboardType: TextInputType.number,
                       validator: (value) {
@@ -108,9 +144,21 @@ class NewProduct extends WidgetView<NewProduct, NewProductControllerState> {
                     /// Product SKU Field
                     TextFormField(
                       controller: controllerState.skuController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Product SKU for/from barcode',
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                          ), // Change this to your desired color
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFB5A13F),
+                          ), // Color when focused
+                        ),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -173,9 +221,21 @@ class NewProduct extends WidgetView<NewProduct, NewProductControllerState> {
 
                     /// UOM Dropdown
                     DropdownButtonFormField<Uom>(
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Select UOM',
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                          ), // Change this to your desired color
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFB5A13F),
+                          ), // Color when focused
+                        ),
                       ),
                       value: controllerState.selectedUom,
                       items: state is LoadProductUomSuccess && state.response.isNotEmpty

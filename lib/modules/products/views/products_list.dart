@@ -58,6 +58,18 @@ class ProductsList extends WidgetView<ProductsList, ProductsListControllerState>
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                            ), // Change this to your desired color
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(
+                              color: Color(0xFFB5A13F),
+                            ), // Color when focused
+                          ),
                         ),
                         onChanged: (query) {
                           query = query.toLowerCase();
@@ -95,7 +107,7 @@ class ProductsList extends WidgetView<ProductsList, ProductsListControllerState>
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
                               child: Card(
-                                elevation: 4,
+                                elevation: 1,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(16),
                                 ),

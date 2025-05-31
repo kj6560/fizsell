@@ -35,6 +35,18 @@ class NewInventoryScreen
                       decoration: InputDecoration(
                         labelText: 'Product Sku',
                         border: OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                          ), // Change this to your desired color
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFB5A13F),
+                          ), // Color when focused
+                        ),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -51,6 +63,18 @@ class NewInventoryScreen
                       decoration: InputDecoration(
                         labelText: 'Enter Product Quantity',
                         border: OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                          ), // Change this to your desired color
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFB5A13F),
+                          ), // Color when focused
+                        ),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {

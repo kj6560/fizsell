@@ -46,6 +46,18 @@ class NewCustomerScreen
                           decoration: InputDecoration(
                             labelText: 'Enter Customer Name',
                             border: OutlineInputBorder(),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Colors.grey,
+                              ), // Change this to your desired color
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Color(0xFFB5A13F),
+                              ), // Color when focused
+                            ),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -62,6 +74,18 @@ class NewCustomerScreen
                           decoration: InputDecoration(
                             labelText: 'Enter Customer Address',
                             border: OutlineInputBorder(),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Colors.grey,
+                              ), // Change this to your desired color
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Color(0xFFB5A13F),
+                              ), // Color when focused
+                            ),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -79,6 +103,18 @@ class NewCustomerScreen
                           decoration: InputDecoration(
                             labelText: 'Enter Customer Phone Number',
                             border: OutlineInputBorder(),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Colors.grey,
+                              ), // Change this to your desired color
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Color(0xFFB5A13F),
+                              ), // Color when focused
+                            ),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -94,6 +130,18 @@ class NewCustomerScreen
                           decoration: InputDecoration(
                             labelText: 'Select Customer Type',
                             border: OutlineInputBorder(),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Colors.grey,
+                              ), // Change this to your desired color
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Color(0xFFB5A13F),
+                              ), // Color when focused
+                            ),
                           ),
                           value: controllerState.selectedCustomerType,
                           items: controllerState.customerTypeItems.map((String type) {
@@ -120,6 +168,18 @@ class NewCustomerScreen
                           decoration: InputDecoration(
                             labelText: 'Select Customer Active',
                             border: OutlineInputBorder(),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Colors.grey,
+                              ), // Change this to your desired color
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                color: Color(0xFFB5A13F),
+                              ), // Color when focused
+                            ),
                           ),
                           value: controllerState.selectedValue,
                           items:

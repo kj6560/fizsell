@@ -66,30 +66,45 @@ class SalesListUi extends WidgetView<SalesListUi, SalesListControllerState> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: TextField(
-                          controller: searchController,
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.search),
-                            hintText: 'Search by Order ID',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextField(
+                            controller: searchController,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.search),
+                              hintText: 'Search by Order ID',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: const BorderSide(
+                                  color: Colors.grey,
+                                ), // Change this to your desired color
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFB5A13F),
+                                ), // Color when focused
+                              ),
                             ),
+                            onChanged: (value) {
+                              value = value.toLowerCase();
+                              setState(() {
+                                if (value.isEmpty) {
+                                  filteredSales = List.from(allSales);
+                                } else {
+                                  filteredSales = allSales.where((sale) {
+                                    return sale.orderId
+                                        .toString()
+                                        .toLowerCase()
+                                        .contains(value);
+                                  }).toList();
+                                }
+                              });
+                            },
                           ),
-                          onChanged: (value) {
-                            value = value.toLowerCase();
-                            setState(() {
-                              if (value.isEmpty) {
-                                filteredSales = List.from(allSales);
-                              } else {
-                                filteredSales = allSales.where((sale) {
-                                  return sale.orderId
-                                      .toString()
-                                      .toLowerCase()
-                                      .contains(value);
-                                }).toList();
-                              }
-                            });
-                          },
                         ),
                       ),
                       Expanded(
@@ -111,7 +126,7 @@ class SalesListUi extends WidgetView<SalesListUi, SalesListControllerState> {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 10, vertical: 6),
                                       child: Card(
-                                        elevation: 4,
+                                        elevation: 1,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(16),

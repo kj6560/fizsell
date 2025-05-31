@@ -99,8 +99,8 @@ class _AppDrawerState extends State<AppDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+
       child: Container(
-        color: Colors.white,
         child: Column(
           children: [
             Expanded(
@@ -110,7 +110,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   UserAccountsDrawerHeader(
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [Colors.teal, Colors.tealAccent],
+                        colors: [Color(0xFFF5F5F5), Color(0xFFB5A13F)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),

@@ -9,9 +9,11 @@ class BaseScreen extends StatefulWidget {
   final List<Widget>? appBarActions;
   final VoidCallback? onFabPressed;
   final IconData fabIcon;
+
   const BaseScreen({
     required this.title,
-    required this.body, Key? key,
+    required this.body,
+    Key? key,
     this.onFabPressed,
     this.appBarActions,
     this.fabIcon = Icons.add,
@@ -26,22 +28,23 @@ class _BaseScreenState extends State<BaseScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
+
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.title, style: TextStyle(color: Colors.white)),
         actions: widget.appBarActions,
       ),
       drawer: AppDrawer(),
       body: widget.body,
-      floatingActionButton: widget.onFabPressed != null
-          ? FloatingActionButton(
-        onPressed: widget.onFabPressed,
-        backgroundColor: Colors.teal,
-        child: Icon(widget.fabIcon, color: Colors.white),
-      )
-          : null,
+      floatingActionButton:
+          widget.onFabPressed != null
+              ? FloatingActionButton(
+                onPressed: widget.onFabPressed,
+                backgroundColor: Colors.teal,
+                child: Icon(widget.fabIcon, color: Colors.white),
+              )
+              : null,
     );
   }
 }

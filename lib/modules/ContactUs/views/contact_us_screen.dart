@@ -34,18 +34,42 @@ class ContactUsScreen extends WidgetView<ContactUsScreen, ContactUsControllerSta
                   children: [
                     TextFormField(
                       controller: controllerState.nameController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Name',
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                          ), // Change this to your desired color
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFB5A13F),
+                          ), // Color when focused
+                        ),
                       ),
                       validator: (value) => value == null || value.isEmpty ? 'Please enter your name' : null,
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: controllerState.emailController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Email',
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                          ), // Change this to your desired color
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFB5A13F),
+                          ), // Color when focused
+                        ),
                       ),
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
@@ -57,9 +81,21 @@ class ContactUsScreen extends WidgetView<ContactUsScreen, ContactUsControllerSta
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: controllerState.messageController,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Message',
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                          ), // Change this to your desired color
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFB5A13F),
+                          ), // Color when focused
+                        ),
                       ),
                       maxLines: 4,
                       validator: (value) => value == null || value.isEmpty ? 'Please enter your message' : null,

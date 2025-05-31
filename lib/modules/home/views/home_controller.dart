@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:fizsell/modules/products/bloc/product_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -32,6 +33,7 @@ class HomeControllerState extends State<HomeController>
     WidgetsBinding.instance.addObserver(this);
     initAuthCred();
     BlocProvider.of<HomeBloc>(context).add(HomeLoad());
+    BlocProvider.of<ProductBloc>(context).add(LoadProductList());
   }
 
   void initAuthCred() async {
