@@ -118,36 +118,40 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
   }
 
   Widget _buildDashboardCard(LoadSuccess state) {
-    return Card(
-      color: Colors.white60,
-      elevation: 1,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      margin: const EdgeInsets.all(16),
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildColumn("Time", ["", "Today", "Monthly", "Total"]),
-            _buildColumn("Products", [
-              "",
-              "${state.response.productsData.productsAddedToday}",
-              "${state.response.productsData.productsAddedThisMonth}",
-              "${state.response.productsData.productsAddedTotal}",
-            ]),
-            _buildColumn("Inventory", [
-              "",
-              "${state.response.inventoryData.inventoryAddedToday}",
-              "${state.response.inventoryData.inventoryAddedThisMonth}",
-              "${state.response.inventoryData.inventoryAddedTotal}",
-            ]),
-            _buildColumn("Sales", [
-              "",
-              "₹${state.response.salesData.salesToday}",
-              "₹${state.response.salesData.salesThisMonth}",
-              "₹${state.response.salesData.salesTotal}",
-            ]),
-          ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        child: Card(
+          elevation: 1,
+          shadowColor: Color(0xFFB5A13F),
+        // border added,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildColumn("Time", ["", "Today", "Monthly", "Total"]),
+                _buildColumn("Products", [
+                  "",
+                  "${state.response.productsData.productsAddedToday}",
+                  "${state.response.productsData.productsAddedThisMonth}",
+                  "${state.response.productsData.productsAddedTotal}",
+                ]),
+                _buildColumn("Inventory", [
+                  "",
+                  "${state.response.inventoryData.inventoryAddedToday}",
+                  "${state.response.inventoryData.inventoryAddedThisMonth}",
+                  "${state.response.inventoryData.inventoryAddedTotal}",
+                ]),
+                _buildColumn("Sales", [
+                  "",
+                  "₹${state.response.salesData.salesToday}",
+                  "₹${state.response.salesData.salesThisMonth}",
+                  "₹${state.response.salesData.salesTotal}",
+                ]),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -181,7 +185,7 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
           decoration: BoxDecoration(
             color: Colors.white60,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.grey.shade300, width: 1),
+            border: Border.all(color: Color(0xFFB5A13F), width: 2),
             // border added
             boxShadow: [
               BoxShadow(
@@ -388,7 +392,7 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
           decoration: BoxDecoration(
             color: Colors.white60,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.grey.shade300, width: 1),
+            border: Border.all(color: Color(0xFFB5A13F), width: 2),
             // border added
             boxShadow: [
               BoxShadow(
