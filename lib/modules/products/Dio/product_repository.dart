@@ -68,38 +68,32 @@ class ProductRepositoryImpl {
       double product_mrp,
       double base_price,
       int uom_id,
-      List<File> selectedImages,  // <-- Add this parameter for images
+      List<File> selectedImages,
       ) async {
     try {
       print("selected images: ${selectedImages.length}");
-      // Create FormData instead of JSON
+
       FormData formData = FormData.fromMap({
-        'org_id': org_id,
+        'org_id': org_id.toString(),
         'name': name,
         'sku': sku,
-        'product_mrp': product_mrp,
-        'base_price': base_price,
-        'uom_id': uom_id,
+        'product_mrp': product_mrp.toString(),
+        'base_price': base_price.toString(),
+        'uom_id': uom_id.toString(),
+        'images[]': await Future.wait(selectedImages.map((file) async {
+          return await MultipartFile.fromFile(file.path, filename: file.path.split('/').last);
+        })),
       });
+      print("Sending fields:");
+      formData.fields.forEach((f) => print("${f.key}: ${f.value}"));
 
-      // Add images to formData
-      for (int i = 0; i < selectedImages.length; i++) {
-        formData.files.add(MapEntry(
-          'images[]', // Or 'image_path' depending on your backend
-          await MultipartFile.fromFile(
-            selectedImages[i].path,
-            filename: selectedImages[i].path.split('/').last,
-          ),
-        ));
-      }
-
-      // Send request
+      print("Sending files:");
+      formData.files.forEach((f) => print("${f.key}: ${f.value.filename}"));
       Response response = await dio.post(
         EndPoints.addProduct,
         data: formData,
         options: Options(
           headers: {
-            'Content-Type': 'multipart/form-data', // important for file uploads
             'Accept': 'application/json',
             'Authorization': 'Bearer $token',
           },
@@ -110,9 +104,13 @@ class ProductRepositoryImpl {
     } catch (e, stacktrace) {
       print('Error in addProducts: $e');
       print(stacktrace);
+      return null;
     }
-    return null;
   }
+
+
+
+
 
 
   Future<Response?> generateBarcode(String token, String barcodeValue) async {

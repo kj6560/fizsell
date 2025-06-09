@@ -248,7 +248,7 @@ class ProductsList extends WidgetView<ProductsList, ProductsListControllerState>
       },
       appBarActions: [
         IconButton(
-          icon: const Icon(Icons.local_offer, color: Colors.teal),
+          icon: const Icon(Icons.local_offer, color: Colors.white60),
           onPressed: () {
             if (controllerState.hasActiveSubscription) {
               Navigator.popAndPushNamed(context, AppRoutes.listSchemes);

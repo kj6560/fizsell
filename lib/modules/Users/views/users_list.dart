@@ -10,13 +10,13 @@ class UsersList extends WidgetView<UsersList, UsersListControllerState> {
       body: BlocConsumer<UserBloc, UserState>(
         listener: (context, state) {
           if (state is DeleteUserSuccess) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.message)));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
           } else if (state is DeleteUserFailure) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.error)));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.error)),
+            );
           }
         },
         builder: (context, state) {
@@ -25,34 +25,57 @@ class UsersList extends WidgetView<UsersList, UsersListControllerState> {
               child: CircularProgressIndicator(color: Colors.teal),
             );
           } else if (state is LoadUserlistSuccess) {
-            if (state.userList.length > 0) {
-              return ListView.builder(
+            if (state.userList.isNotEmpty) {
+              return ListView.separated(
+                padding: const EdgeInsets.all(16),
                 itemCount: state.userList.length,
+                separatorBuilder: (_, __) => const SizedBox(height: 12),
                 itemBuilder: (context, index) {
                   final user = state.userList[index];
-                  return ListTile(
-                    title: Text(user.name ?? "No Name"),
-                    subtitle: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                  return Card(
+                    elevation: 1,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
+                      leading: ClipRRect(
+                        borderRadius: BorderRadius.circular(30),
+                        child: Image.network(
+                          "${baseUrl}/storage/${user.profilePic ?? ''}",
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                          const Icon(Icons.account_circle, size: 50),
+                        ),
+                      ),
+                      title: Text(
+                        user.name ?? "No Name",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          const SizedBox(height: 4),
                           Text(user.email ?? "No Email"),
                           Text(user.number ?? "No Number"),
                         ],
                       ),
-                    ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red),
-                      onPressed: () {
-                        controllerState.showDeleteConfirmationDialog(user.id);
-                      },
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.red),
+                        onPressed: () {
+                          controllerState.showDeleteConfirmationDialog(user.id);
+                        },
+                      ),
                     ),
                   );
                 },
               );
             } else {
-              return Column(children: [Center(child: Text("No Active users found"),)]);
+              return const Center(child: Text("No active users found."));
             }
           } else if (state is LoadUserListFailure) {
             return Center(child: Text(state.error));

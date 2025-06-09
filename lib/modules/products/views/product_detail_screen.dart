@@ -11,7 +11,13 @@ class ProductDetailScreen
 
       fabIcon: Icons.edit,
       onFabPressed: () {
-        Navigator.popAndPushNamed(context, AppRoutes.newProduct);
+        Navigator.popAndPushNamed(
+          context,
+          AppRoutes.editProduct,
+          arguments: {
+            "product_id": controllerState.product_id
+          },
+        );
       },
       body: BlocConsumer<ProductBloc, ProductState>(
         listener: (context, state) {
@@ -29,7 +35,7 @@ class ProductDetailScreen
             return SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: Card(
-                elevation: 4,
+                elevation: 1,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16)),
                 child: Padding(
@@ -47,33 +53,47 @@ class ProductDetailScreen
                       buildInfoRow(
                           "Active", product.isActive == 1 ? 'Yes' : 'No'),
                       const SizedBox(height: 24),
+                      if (product.images != null && product.images.toString().isNotEmpty)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Product Images:",
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(height: 10),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: (() {
+                                final List<String> imageList = product.images is List
+                                    ? List<String>.from(product.images)
+                                    : product.images.toString().split(',');
+
+                                return imageList.map(
+                                      (imgPath) => ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Image.network(
+                                      "$baseUrl/storage/$imgPath",
+                                      height: 100,
+                                      width: 100,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) =>
+                                      const Icon(Icons.broken_image),
+                                    ),
+                                  ),
+                                ).toList();
+                              })(),
+                            ),
+                            const SizedBox(height: 24),
+                          ],
+                        ),
+
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          ElevatedButton.icon(
-                            onPressed: () {
-                              Navigator.popAndPushNamed(
-                                context,
-                                AppRoutes.editProduct,
-                                arguments: {
-                                  "product_id": controllerState.product_id
-                                },
-                              );
-                            },
-                            icon: const Icon(
-                              Icons.edit,
-                              color: Colors.white,
-                            ),
-                            label: const Text(
-                              "Edit",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.teal,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 12),
-                            ),
-                          ),
+
                           ElevatedButton.icon(
                             onPressed: () {
                               controllerState.deleteProduct();

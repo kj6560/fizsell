@@ -18,7 +18,7 @@ class SchemeDetailScreen
             Scheme scheme = state.response;
             return SingleChildScrollView(
               child: Card(
-                elevation: 5,
+                elevation: 1,
                 margin: const EdgeInsets.all(12),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
@@ -110,6 +110,7 @@ class SchemeDetailScreen
 
   Widget _buildProductTile(Product product, [String? title]) {
     return Card(
+      elevation: 1,
       color: Colors.blue.shade50,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       margin: const EdgeInsets.symmetric(vertical: 5),

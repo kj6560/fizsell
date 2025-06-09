@@ -32,7 +32,7 @@ class SalesDetailScreen
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Card(
-                    elevation: 4,
+                    elevation: 1,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
@@ -122,7 +122,7 @@ class SalesDetailScreen
     var decoded = jsonDecode(details);
 
     return Card(
-      elevation: 4,
+      elevation: 1,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),

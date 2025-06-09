@@ -8,6 +8,7 @@ import 'package:fizsell/modules/Organization/bloc/organization_bloc.dart';
 import 'package:fizsell/modules/Users/bloc/user_bloc.dart';
 import 'package:fizsell/modules/auth/models/User.dart';
 
+import '../../../core/config/base_url.dart';
 import '../../../core/config/config.dart';
 import '../../../core/local/hive_constants.dart';
 

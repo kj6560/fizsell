@@ -32,9 +32,7 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
         BlocProvider<ProductBloc>(
           create: (_) => ProductBloc()..add(const LoadProductList()),
         ),
-        BlocProvider<SalesBloc>(
-          create: (_) => SalesBloc()..add(const LoadSalesList()),
-        ),
+
       ],
       child: PopScope(
         canPop: false,
@@ -59,7 +57,7 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
                   },
                   builder: (context, state) {
                     if (state is LoadingHome) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator(color: Colors.red,));
                     } else if (state is LoadSuccess) {
                       return _buildDashboardCard(state);
                     } else if (state is LoadFailure) {
@@ -69,36 +67,25 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
                     }
                   },
                 ),
+
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: BlocConsumer<SalesBloc, SalesState>(
-                    listener: (context, state) {
-                      // Add any side-effects for SalesBloc here
-                    },
-                    builder: (context, state) {
-                      if (state is LoadingSalesList) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (state is LoadSalesSuccess) {
-                        return _buildSalesList(
-                          state.response,
-                        ); // Replace with your actual widget
-                      } else if (state is LoadSalesFailure) {
-                        return Center(child: Text(state.error));
-                      } else {
-                        return const SizedBox();
-                      }
-                    },
+                  child: const Center(
+                    child: Text(
+                      "Products",
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(18.0),
                   child: BlocConsumer<ProductBloc, ProductState>(
                     listener: (context, state) {
                       // You can handle additional product-specific side effects here if needed
                     },
                     builder: (context, state) {
                       if (state is LoadingProductList) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const Center(child: CircularProgressIndicator(color: Colors.blue,));
                       } else if (state is LoadProductSuccess) {
                         return _buildProductList(state.response);
                       } else if (state is LoadProductListFailure) {
@@ -119,7 +106,7 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
 
   Widget _buildDashboardCard(LoadSuccess state) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(18.0),
       child: Container(
         child: Card(
           elevation: 1,
@@ -181,12 +168,10 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
     return StatefulBuilder(
       builder: (context, setState) {
         return Container(
-          height: MediaQuery.of(context).size.height * 0.85,
           decoration: BoxDecoration(
             color: Colors.white60,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Color(0xFFB5A13F), width: 2),
-            // border added
+            border: Border.all(color: const Color(0xFFB5A13F), width: 2),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.2),
@@ -197,337 +182,168 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
           ),
           child: Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Center(
-                  child: Text(
-                    "Products",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+              // 🔍 Search Box
               Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: _searchProductsController,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.search),
-                      hintText: 'Search by Order ID',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: Colors.grey,
-                        ), // Change this to your desired color
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: Color(0xFFB5A13F),
-                        ), // Color when focused
-                      ),
+                child: TextField(
+                  controller: _searchProductsController,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.search),
+                    hintText: 'Search by Order ID',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    onChanged: (query) {
-                      query = query.toLowerCase();
-                      setState(() {
-                        if (query.isEmpty) {
-                          filteredProducts = List.from(products);
-                        } else {
-                          filteredProducts =
-                              products.where((product) {
-                                return product.name.toLowerCase().contains(
-                                      query,
-                                    ) ||
-                                    product.sku.toLowerCase().contains(query);
-                              }).toList();
-                        }
-                      });
-                    },
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Colors.grey),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Color(0xFFB5A13F)),
+                    ),
                   ),
+                  onChanged: (query) {
+                    query = query.toLowerCase();
+                    setState(() {
+                      filteredProducts = query.isEmpty
+                          ? List.from(products)
+                          : products.where((product) {
+                        return product.name
+                            .toLowerCase()
+                            .contains(query) ||
+                            product.sku
+                                .toLowerCase()
+                                .contains(query);
+                      }).toList();
+                    });
+                  },
                 ),
               ),
-              filteredProducts.isEmpty
-                  ? const Center(child: Text("No products found"))
-                  : ListView.builder(
-                    itemCount: filteredProducts.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      final product = filteredProducts[index];
-                      return InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            AppRoutes.productDetails,
-                            arguments: {"product_id": product.id},
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12.0,
-                            vertical: 6.0,
-                          ),
-                          child: Card(
-                            elevation: 1,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Row(
-                                children: [
-                                  // Product Image
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(12),
-                                    child: Image.network(
-                                      (product.images != null &&
-                                              product.images.isNotEmpty &&
-                                              product.images[0].isNotEmpty)
-                                          ? "$picBaseUrl/${product.images[0]}"
-                                          : 'https://via.placeholder.com/80',
-                                      width: 80,
-                                      height: 80,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (
-                                        context,
-                                        error,
-                                        stackTrace,
-                                      ) {
-                                        return Container(
-                                          width: 80,
-                                          height: 80,
-                                          color: Colors.grey[300],
-                                          child: const Icon(
-                                            Icons.broken_image,
-                                            size: 40,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  // Product Info
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          product.name,
-                                          style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 6),
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.qr_code,
-                                              size: 16,
-                                              color: Colors.grey[700],
-                                            ),
-                                            const SizedBox(width: 4),
-                                            const Text(
-                                              "SKU: ",
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Text(
-                                                product.sku,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.currency_rupee,
-                                              size: 16,
-                                              color: Colors.green[700],
-                                            ),
-                                            const SizedBox(width: 4),
-                                            Text(
-                                              "${product.productMrp}",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.green[800],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 
-  Widget _buildSalesList(List<SalesModel> allSales) {
-    return StatefulBuilder(
-      builder: (context, setState) {
-        List<SalesModel> filteredSales = List.from(allSales);
-        return Container(
-          height: MediaQuery.of(context).size.height * 0.50,
-          decoration: BoxDecoration(
-            color: Colors.white60,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Color(0xFFB5A13F), width: 2),
-            // border added
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
-                blurRadius: 6,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Column(
-            children: [
-              const Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: const Center(
-                  child: Text(
-                    "Orders",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: searchSalesController,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.search),
-                      hintText: 'Search by Order ID',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: Colors.grey,
-                        ), // Change this to your desired color
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: Color(0xFFB5A13F),
-                        ), // Color when focused
-                      ),
-                    ),
-                    onChanged: (value) {
-                      value = value.toLowerCase();
-                      setState(() {
-                        if (value.isEmpty) {
-                          filteredSales = List.from(allSales);
-                        } else {
-                          filteredSales =
-                              allSales.where((sale) {
-                                return sale.orderId
-                                    .toString()
-                                    .toLowerCase()
-                                    .contains(value);
-                              }).toList();
-                        }
-                      });
-                    },
-                  ),
-                ),
-              ),
-              Expanded(
-                child:
-                    filteredSales.isEmpty
-                        ? const Center(child: Text("No Orders Found"))
-                        : ListView.builder(
-                          itemCount: filteredSales.length,
-                          itemBuilder: (context, index) {
-                            SalesModel order = filteredSales[index];
-                            return InkWell(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  AppRoutes.salesDetails,
-                                  arguments: {"sales_id": order.orderId},
-                                );
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 6,
-                                ),
-                                child: Card(
-                                  elevation: 1,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16),
+              // 📦 Product List View (max 3 visible, scrollable)
+              filteredProducts.isEmpty
+                  ? const Padding(
+                padding: EdgeInsets.only(top: 24.0),
+                child: Center(child: Text("No products found")),
+              )
+                  : SizedBox(
+                height: 3 * 115.0, // Approx height for 3 cards
+                child: ListView.builder(
+                  itemCount: filteredProducts.length,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  itemBuilder: (context, index) {
+                    final product = filteredProducts[index];
+                    return InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          AppRoutes.productDetails,
+                          arguments: {"product_id": product.id},
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6.0),
+                        child: Card(
+                          elevation: 1,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Row(
+                              children: [
+                                // Product Image
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Image.network(
+                                    (product.images != null &&
+                                        product.images.isNotEmpty &&
+                                        product.images[0].isNotEmpty)
+                                        ? "$picBaseUrl/${product.images[0]}"
+                                        : 'https://via.placeholder.com/80',
+                                    width: 80,
+                                    height: 80,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Container(
+                                        width: 80,
+                                        height: 80,
+                                        color: Colors.grey[300],
+                                        child: const Icon(
+                                          Icons.broken_image,
+                                          size: 40,
+                                        ),
+                                      );
+                                    },
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Order ID: ${order.orderId}",
-                                          style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
+                                ),
+                                const SizedBox(width: 12),
+                                // Product Info
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        product.name,
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.qr_code,
+                                            size: 16,
+                                            color: Colors.grey[700],
                                           ),
-                                        ),
-                                        const SizedBox(height: 8),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                const Text("Amount: "),
-                                                const Icon(
-                                                  Icons.currency_rupee,
-                                                  size: 16,
-                                                ),
-                                                Text("${order.netTotal}"),
-                                              ],
+                                          const SizedBox(width: 4),
+                                          const Text(
+                                            "SKU: ",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w500,
                                             ),
-                                            Text(
-                                              '${order.orderDate}',
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.grey[600],
-                                              ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              product.sku,
+                                              overflow: TextOverflow.ellipsis,
                                             ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.currency_rupee,
+                                            size: 16,
+                                            color: Colors.green[700],
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            "${product.productMrp}",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.green[800],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
-                            );
-                          },
+                              ],
+                            ),
+                          ),
                         ),
+                      ),
+                    );
+                  },
+                ),
               ),
             ],
           ),
