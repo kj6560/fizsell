@@ -3,8 +3,16 @@ library sales_detail_library;
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pdf/pdf.dart';
+import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
+import 'dart:typed_data';
+import 'package:http/http.dart' as http;
+import 'package:printing/printing.dart';
+import 'package:image/image.dart' as img;
+import 'package:pdf/widgets.dart' as pw;
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 
 import '../../../../core/config/config.dart';
@@ -28,7 +36,6 @@ class SalesDetailState extends State<SalesDetailController> {
   String email = "";
   String? salesId;
   String? selectedPrinterAddress;
-
   @override
   void initState() {
     super.initState();
@@ -96,43 +103,18 @@ class SalesDetailState extends State<SalesDetailController> {
     }
   }
 
-
-  /// Print Invoice
-  Future<void> printInvoice(String invoiceText) async {
-    final userSettings = authBox.get(HiveKeys.settingsBox);
-    if (userSettings == null) {
-      _showNoPrinterDialog();
-      return;
-    }
-
-    Map<String, dynamic> settings;
-    try {
-      settings = jsonDecode(userSettings);
-    } catch (e) {
-      print("❌ Failed to decode printer settings: $e");
-      return;
-    }
-
-    final savedAddress = settings['printer_connected'];
-    if (savedAddress == null) {
-      print("❌ No printer saved.");
-      return;
-    }
-
-    try {
-      bool isConnected = await PrintBluetoothThermal.connectionStatus;
-      if (isConnected) {
-        await PrintBluetoothThermal.connect(macPrinterAddress: savedAddress);
-      }
-
-      Uint8List bytes = Uint8List.fromList(invoiceText.codeUnits);
-      await PrintBluetoothThermal.writeBytes(bytes);
-
-      print("✅ Invoice printed successfully.");
-    } catch (e) {
-      print("❌ Printing failed: $e");
-    }
+  Future<void> printInvoice(String print_invoice) async {
+    final intent = AndroidIntent(
+      action: 'android.intent.action.SEND',
+      package: 'ru.a402d.rawbtprinter',
+      type: 'text/plain',
+      arguments: {
+        'android.intent.extra.TEXT': "${print_invoice}",
+      },
+    );
+    intent.launch();
   }
+
   void _showNoPrinterDialog() {
     showDialog(
       context: context,

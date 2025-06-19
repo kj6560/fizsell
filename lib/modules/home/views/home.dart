@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:fizsell/core/config/AppConstants.dart';
 import 'package:fizsell/modules/orders/bloc/sales_bloc.dart';
 import 'package:fizsell/modules/orders/models/sales_model.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,7 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
           }
         },
         child: BaseScreen(
-          title: "Home",
+          title: AppConstants.appName,
           body: SingleChildScrollView(
             padding: const EdgeInsets.only(bottom: 20),
             child: Column(

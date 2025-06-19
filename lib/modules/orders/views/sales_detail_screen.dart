@@ -70,13 +70,14 @@ class SalesDetailScreen
                   const SizedBox(height: 10),
                   showDetail(details),
                   const SizedBox(height: 20),
+
                   SizedBox(
                     height: 40,
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        controllerState
-                            .printInvoice(state.response.print_invoice);
+                        //controllerState.printInvoice();
+                        controllerState.printInvoice(state.response.print_invoice);
                       },
                       icon: Icon(Icons.print),
                       label: Text("Print Invoice"),

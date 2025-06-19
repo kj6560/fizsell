@@ -27,9 +27,12 @@ dependencies:
   image_picker:
   print_bluetooth_thermal:
   url_launcher:
+  android_intent_plus:
   intl:
   cached_network_image:
   mobile_device_identifier:
+  printing: ^5.14.2
+  pdf:
 dev_dependencies:
   flutter_test:
     sdk: flutter

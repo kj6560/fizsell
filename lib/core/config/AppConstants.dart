@@ -5,9 +5,9 @@ import '../local/hive_constants.dart';
 import 'config.dart';
 
 class AppConstants {
-  static const String appName = "SwiftSell";
+  static const String appName = "FizSell";
   static const String companyName = "Shiwkesh Schematics Private Limited";
-  int? getUserRole(){
+  static int? getUserRole(){
     String userJson = authBox.get(HiveKeys.userBox);
     User user = User.fromJson(jsonDecode(userJson));
     return user.role;

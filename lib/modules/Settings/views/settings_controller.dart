@@ -2,6 +2,7 @@ library settings_library;
 
 import 'dart:convert';
 
+import 'package:fizsell/modules/Settings/views/currency_settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';

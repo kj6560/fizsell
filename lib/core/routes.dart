@@ -1,3 +1,4 @@
+import 'package:fizsell/modules/Settings/views/currency_settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fizsell/modules/ContactUs/views/contact_us_controller.dart';
 import 'package:fizsell/modules/ContactUs/views/contact_us_responses_controller.dart';
@@ -56,6 +57,7 @@ class AppRoutes {
   static const String contactUsResponses = '/contact_us_responses';
   static const String userList = '/user_list';
   static const String newUser = '/new_user';
+  static const String currencySettings = "/currencySettings";
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -155,6 +157,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => UsersListController());
       case newUser:
         return MaterialPageRoute(builder: (_) => NewUserController());
+      case currencySettings:
+        return MaterialPageRoute(builder: (_) => CurrencySettingsController());
       default:
         return MaterialPageRoute(builder: (_) => LoginController());
     }

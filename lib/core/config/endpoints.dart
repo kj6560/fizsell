@@ -40,5 +40,6 @@ class EndPoints {
   static const String fetchUsersByOrg = '${baseUrl}/api/fetchUsersByOrg';
   static const String createNewUser = '${baseUrl}/api/createNewUser';
   static const String deleteUser = '${baseUrl}/api/deleteUser';
-
+  static const String fetchCurrencies = '${baseUrl}/api/fetchCurrencies';
+  static const String setCurrency = '${baseUrl}/api/setCurrency';
 }
