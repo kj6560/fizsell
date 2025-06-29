@@ -44,7 +44,10 @@ class SalesBloc extends Bloc<SalesEvent, SalesState> {
       final data = response.data['data'] is String
           ? jsonDecode(response.data['data'])
           : response.data['data'];
-
+      if (response.data["subscriptionError"] == 1) {
+        emit(OrderSubscriptionFailure(response.data['message']));
+        return;
+      }
       final List<SalesModel> inventories = salesModelFromJson(jsonEncode(data));
 
       if (response.statusCode == 401) {

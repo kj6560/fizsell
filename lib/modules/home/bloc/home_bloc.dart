@@ -35,7 +35,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       String token = await authBox.get(HiveKeys.accessToken);
       User user = User.fromJson(jsonDecode(userString));
       final response = await homeRepositoryImpl.fetchKpi(user.id, token);
-      print(response);
       if (response == null || response.data == null) {
         emit(LoadFailure(error: "No response from server"));
         return;
@@ -46,12 +45,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           response.data['data'] is String
               ? jsonDecode(response.data['data'])
               : response.data['data'];
+      if (response.data["subscriptionError"] == 1) {
+        emit(SubscriptionFailure(response.data['message']));
+        return;
+      }
       final kpiResponse = HomeResponse.fromJson(data);
-      print(kpiResponse);
+
       if (response.statusCode == 401) {
         emit(ForceLogout());
         return;
       }
+
       if (response.statusCode == 200 && response.data['status'] == 'error') {
         emit(LoadFailure(error: "You Do not have an active subscription"));
         return;

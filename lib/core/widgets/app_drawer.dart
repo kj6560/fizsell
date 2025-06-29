@@ -258,7 +258,17 @@ class _AppDrawerState extends State<AppDrawer> {
               child: Text(
                 AppConstants.companyName,
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 14,
+                  color: Colors.black54,
+                ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(5.0),
+              child: Text(
+                "App Version 1.0.0",
+                style: TextStyle(
+                  fontSize: 14,
                   color: Colors.black54,
                 ),
               ),

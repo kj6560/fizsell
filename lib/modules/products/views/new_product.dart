@@ -215,6 +215,16 @@ class NewProduct extends WidgetView<NewProduct, NewProductControllerState> {
                               label: const Text("Download Barcode"),
                             ),
                           ),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              onPressed: () async {
+                                await controllerState.printBarcode(context);
+                              },
+                              icon: const Icon(Icons.download),
+                              label: const Text("Print Barcode"),
+                            ),
+                          ),
                         ],
                       ),
                     const SizedBox(height: 10),

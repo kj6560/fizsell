@@ -63,6 +63,10 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
                       return _buildDashboardCard(state);
                     } else if (state is LoadFailure) {
                       return Center(child: Text(state.error));
+                    }else if(state is SubscriptionFailure){
+                      return Center(
+                        child: Text("You don't have an active subscription. Plz contact Admin"),
+                      );
                     } else {
                       return const SizedBox();
                     }
@@ -91,7 +95,11 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
                         return _buildProductList(state.response);
                       } else if (state is LoadProductListFailure) {
                         return Center(child: Text(state.error));
-                      } else {
+                      }else if(state is ProductSubscriptionFailure){
+                        return const Center(
+                          child: Text("You don't have an active subscription. Plz contact Admin"),
+                        );
+                      }  else {
                         return const SizedBox();
                       }
                     },

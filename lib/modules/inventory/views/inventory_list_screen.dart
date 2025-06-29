@@ -120,6 +120,10 @@ class InventoryListUi
                 ],
               );
             }
+          }else if(state is InventorySubscriptionFailure){
+            return const Center(
+              child: Text("You don't have an active subscription. Plz contact Admin"),
+            );
           }
           else if (state is LoadInventoryFailure) {
             return Center(

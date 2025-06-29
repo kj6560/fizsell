@@ -41,7 +41,10 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
       final data = response.data['data'] is String
           ? jsonDecode(response.data['data'])
           : response.data['data'];
-      print(data);
+      if (response.data["subscriptionError"] == 1) {
+        emit(InventorySubscriptionFailure(response.data['message']));
+        return;
+      }
       final List<InventoryModel> inventories =
           inventoryModelFromJson(jsonEncode(data));
 

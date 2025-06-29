@@ -204,6 +204,10 @@ class ProductsList extends WidgetView<ProductsList, ProductsListControllerState>
                 );
               },
             );
+          }else if(state is ProductSubscriptionFailure){
+            return const Center(
+              child: Text("You don't have an active subscription. Plz contact Admin"),
+            );
           } else if (state is LoadProductListFailure) {
             return Center(
               child: Column(

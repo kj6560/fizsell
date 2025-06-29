@@ -208,6 +208,10 @@ class CustomersListScreen
                 );
               },
             );
+          }else if(state is CustomerSubscriptionFailure){
+            return const Center(
+              child: Text("You don't have an active subscription. Plz contact Admin"),
+            );
           } else if (state is LoadCustomersFailure) {
             return Center(
               child: Column(

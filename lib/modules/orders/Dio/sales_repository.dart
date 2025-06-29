@@ -3,19 +3,34 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 
 import '../../../../core/config/endpoints.dart';
-
+import 'package:dio_curl_logger/dio_curl_logger.dart';
 class SaleRepositoryImpl {
   final Dio dio = Dio();
 
   SaleRepositoryImpl();
 
-  Future<Response?> fetchOrder(int org_id, String token,
-      {int orderId = 0}) async {
+  Future<Response?> fetchOrder(int org_id, String token, {int orderId = 0}) async {
     try {
-      var body = {'org_id': org_id};
+      // Prepare query parameters
+      Map<String, dynamic> queryParams = {
+        'org_id': org_id,
+      };
+
       if (orderId != 0) {
-        body['order_id'] = orderId;
+        queryParams['order_id'] = orderId;
       }
+
+      // Add interceptor only once (optional, depends on lifecycle)
+      if (!dio.interceptors.any((i) => i is CurlLoggingInterceptor)) {
+        dio.interceptors.add(
+          CurlLoggingInterceptor(
+            showRequestLog: true,
+            showResponseLog: true,
+          ),
+        );
+      }
+
+      // Perform GET request with query parameters
       Response response = await dio.get(
         EndPoints.fetchSales,
         options: Options(
@@ -25,14 +40,17 @@ class SaleRepositoryImpl {
             'Authorization': 'Bearer $token',
           },
         ),
-        data: jsonEncode(body),
+        queryParameters: queryParams,
       );
+
       return response;
     } catch (e, stacktrace) {
-      print(e.toString());
+      print("❌ Exception: $e");
       print(stacktrace);
+      return null;
     }
   }
+
 
   Future<Response?> newOrder(int org_id, int user_id, String payload,
       int payment_method, int customer_id, String token) async {
@@ -44,7 +62,14 @@ class SaleRepositoryImpl {
         'payment_mode': payment_method,
         'customer_id': customer_id
       };
-      print(jsonEncode(body));
+      if (!dio.interceptors.any((i) => i is CurlLoggingInterceptor)) {
+        dio.interceptors.add(
+          CurlLoggingInterceptor(
+            showRequestLog: true,
+            showResponseLog: true,
+          ),
+        );
+      }
       Response response = await dio.post(
         EndPoints.newSales,
         options: Options(

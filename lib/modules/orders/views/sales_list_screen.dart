@@ -180,6 +180,10 @@ class SalesListUi extends WidgetView<SalesListUi, SalesListControllerState> {
                   );
                 },
               );
+            }else if(state is OrderSubscriptionFailure){
+              return const Center(
+                child: Text("You don't have an active subscription. Plz contact Admin"),
+              );
             } else if (state is LoadSalesFailure) {
               return Center(
                 child: Column(

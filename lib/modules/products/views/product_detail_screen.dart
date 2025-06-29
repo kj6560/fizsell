@@ -9,16 +9,16 @@ class ProductDetailScreen
     return BaseScreen(
       title: "Product Detail",
 
-      fabIcon: Icons.edit,
-      onFabPressed: () {
-        Navigator.popAndPushNamed(
-          context,
-          AppRoutes.editProduct,
-          arguments: {
-            "product_id": controllerState.product_id
-          },
-        );
-      },
+      // fabIcon: Icons.edit,
+      // onFabPressed: () {
+      //   // Navigator.popAndPushNamed(
+      //   //   context,
+      //   //   AppRoutes.editProduct,
+      //   //   arguments: {
+      //   //     "product_id": controllerState.product_id
+      //   //   },
+      //   // );
+      // },
       body: BlocConsumer<ProductBloc, ProductState>(
         listener: (context, state) {
           if (state is DeleteProductSuccess) {

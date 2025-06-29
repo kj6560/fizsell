@@ -37,6 +37,7 @@ class EditProductScreen
 
   Widget _buildEditProductForm(BuildContext context) {
     print("Total Uom count: ${controllerState.dropdownItems.length}");
+    print("${controllerState.barcodeImageUrl}");
     return SingleChildScrollView(
       child: Form(
         key: controllerState.formKey,
@@ -181,7 +182,7 @@ class EditProductScreen
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image.network(
-                      controllerState.barcodeImageUrl!,
+                      controllerState.barcodeImageUrl,
                       width: 200,
                       height: 100,
                       fit: BoxFit.contain,

@@ -44,7 +44,10 @@ class CustomersBloc extends Bloc<CustomersEvent, CustomersState> {
       final data = response.data['data'] is String
           ? jsonDecode(response.data['data'])
           : response.data['data'];
-      print(data);
+      if (response.data["subscriptionError"] == 1) {
+        emit(CustomerSubscriptionFailure(response.data['message']));
+        return;
+      }
       if (data is List<Map<String, dynamic>>) {}
       final List<Customer> customers = customerFromJson(jsonEncode(data));
       Customer falseCustomer = Customer(
@@ -136,7 +139,10 @@ class CustomersBloc extends Bloc<CustomersEvent, CustomersState> {
       final data = response.data['data'] is String
           ? jsonDecode(response.data['data'])
           : response.data['data'];
-      print(data);
+      if (response.data["subscriptionError"] == 1) {
+        emit(CustomerSubscriptionFailure(response.data['message']));
+        return;
+      }
       final List<Customer> customers = customerFromJson(jsonEncode(data));
 
       if (response.statusCode == 401) {

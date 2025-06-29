@@ -33,7 +33,7 @@ class InventoryDetailScreen
                       );
                     },
                     child: Card(
-                      elevation: 4,
+                      elevation: 1,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16)),
                       child: Padding(
@@ -59,7 +59,7 @@ class InventoryDetailScreen
                   ),
                   const SizedBox(height: 15),
                   Card(
-                    elevation: 4,
+                    elevation: 1,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16)),
                     child: Padding(

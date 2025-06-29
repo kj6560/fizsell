@@ -177,6 +177,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.8.0+1"
+  dio_curl_logger:
+    dependency: "direct main"
+    description:
+      name: dio_curl_logger
+      sha256: fc606362b242688e2e57adb8c6bef3b460793349ea2d5bb1d8f77ab4d963fe68
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   dio_web_adapter:
     dependency: transitive
     description:
@@ -840,6 +848,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.28.0"
+  share_plus:
+    dependency: "direct main"
+    description:
+      name: share_plus
+      sha256: b2961506569e28948d75ec346c28775bb111986bb69dc6a20754a457e3d97fa0
+      url: "https://pub.dev"
+    source: hosted
+    version: "11.0.0"
+  share_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: share_plus_platform_interface
+      sha256: "1032d392bc5d2095a77447a805aa3f804d2ae6a4d5eef5e6ebb3bd94c1bc19ef"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.0"
   sky_engine:
     dependency: transitive
     description: flutter

@@ -34,11 +34,15 @@ class SchemeBloc extends Bloc<SchemeEvent, SchemeState> {
       print('user org id: ${user.orgId}');
       final response =
           await schemeRepositoryImpl.allSchemes(user.orgId!, token);
+
       if (response == null || response.data == null) {
         emit(LoadSchemeListFailure("No response from server"));
         return;
       }
-
+      if (response.data["subscriptionError"] == 1) {
+        emit(SubscriptionFailure(response.data['message']));
+        return;
+      }
       // Ensure data is always a Map<String, dynamic>
       final data = response.data['data'] is String
           ? jsonDecode(response.data['data'])
@@ -50,6 +54,7 @@ class SchemeBloc extends Bloc<SchemeEvent, SchemeState> {
         emit(LoadSchemeListFailure("Login failed."));
         return;
       }
+
       emit(LoadSchemeListSuccess(schemeList));
     } catch (e, stacktrace) {
       print('Exception in bloc: $e');

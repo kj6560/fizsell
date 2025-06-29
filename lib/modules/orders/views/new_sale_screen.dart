@@ -17,6 +17,12 @@ class NewSaleScreen extends WidgetView<NewSaleScreen, NewSaleControllerState> {
             listener: (context, salesState) {
               if (salesState is NewSalesFailure) {
                 _showOrderDialog(context, 2);
+              }else if (salesState is NewSalesSuccess) {
+                // Navigator.popAndPushNamed(
+                //   context,
+                //   AppRoutes.salesDetails,
+                //   arguments: {"sales_id": salesState.response.orderId},
+                // );
               } else if (salesState is ProductDetailFetchSuccess) {
                 _showQuantityDialog(context, salesState.product);
               }

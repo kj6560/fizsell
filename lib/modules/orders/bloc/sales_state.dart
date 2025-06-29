@@ -55,3 +55,7 @@ class ProductDetailFetchFailure extends SalesState {
   final String error;
   ProductDetailFetchFailure(this.error);
 }
+class OrderSubscriptionFailure extends SalesState{
+  final String message;
+  OrderSubscriptionFailure(this.message);
+}

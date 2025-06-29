@@ -48,7 +48,7 @@ class CreateOrganizationScreen extends WidgetView<CreateOrganizationScreen,
                           ConstrainedBox(
                             constraints: const BoxConstraints(maxWidth: 500),
                             child: Card(
-                              elevation: 6,
+                              elevation: 1,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
                               ),
@@ -70,10 +70,22 @@ class CreateOrganizationScreen extends WidgetView<CreateOrganizationScreen,
                                       TextFormField(
                                         controller:
                                             controllerState._orgNameController,
-                                        decoration: const InputDecoration(
+                                        decoration: InputDecoration(
                                           labelText: "Organization Name",
-                                          prefixIcon: Icon(Icons.business),
-                                          border: OutlineInputBorder(),
+                                          prefixIcon: const Icon(Icons.business),
+                                          border: const OutlineInputBorder(),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                            ), // Change this to your desired color
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                            borderSide: const BorderSide(
+                                              color: Color(0xFFB5A13F),
+                                            ), // Color when focused
+                                          ),
                                         ),
                                         validator: (value) =>
                                             value == null || value.isEmpty
@@ -86,10 +98,22 @@ class CreateOrganizationScreen extends WidgetView<CreateOrganizationScreen,
                                             controllerState._orgEmailController,
                                         keyboardType:
                                             TextInputType.emailAddress,
-                                        decoration: const InputDecoration(
+                                        decoration: InputDecoration(
                                           labelText: "Email",
-                                          prefixIcon: Icon(Icons.email),
-                                          border: OutlineInputBorder(),
+                                          prefixIcon: const Icon(Icons.email),
+                                          border: const OutlineInputBorder(),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                            ), // Change this to your desired color
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                            borderSide: const BorderSide(
+                                              color: Color(0xFFB5A13F),
+                                            ), // Color when focused
+                                          ),
                                         ),
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
@@ -108,10 +132,22 @@ class CreateOrganizationScreen extends WidgetView<CreateOrganizationScreen,
                                         controller: controllerState
                                             ._orgNumberController,
                                         keyboardType: TextInputType.phone,
-                                        decoration: const InputDecoration(
+                                        decoration: InputDecoration(
                                           labelText: "Phone Number",
-                                          prefixIcon: Icon(Icons.phone),
-                                          border: OutlineInputBorder(),
+                                          prefixIcon: const Icon(Icons.phone),
+                                          border: const OutlineInputBorder(),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                            ), // Change this to your desired color
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                            borderSide: const BorderSide(
+                                              color: Color(0xFFB5A13F),
+                                            ), // Color when focused
+                                          ),
                                         ),
                                         validator: (value) =>
                                             value == null || value.isEmpty
@@ -123,10 +159,22 @@ class CreateOrganizationScreen extends WidgetView<CreateOrganizationScreen,
                                         controller: controllerState
                                             ._orgAddressController,
                                         maxLines: 3,
-                                        decoration: const InputDecoration(
+                                        decoration: InputDecoration(
                                           labelText: "Address",
-                                          prefixIcon: Icon(Icons.location_on),
-                                          border: OutlineInputBorder(),
+                                          prefixIcon: const Icon(Icons.location_on),
+                                          border: const OutlineInputBorder(),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                            ), // Change this to your desired color
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(12),
+                                            borderSide: const BorderSide(
+                                              color: Color(0xFFB5A13F),
+                                            ), // Color when focused
+                                          ),
                                         ),
                                         validator: (value) =>
                                             value == null || value.isEmpty

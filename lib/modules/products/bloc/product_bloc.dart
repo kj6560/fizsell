@@ -45,7 +45,10 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       final data = response.data['data'] is String
           ? jsonDecode(response.data['data'])
           : response.data['data'];
-      print(data);
+      if (response.data["subscriptionError"] == 1) {
+        emit(ProductSubscriptionFailure(response.data['message']));
+        return;
+      }
       final List<Product> products = productFromJson(jsonEncode(data));
 
       if (response.statusCode == 401) {

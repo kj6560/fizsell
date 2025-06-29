@@ -48,3 +48,7 @@ class LoadingInventoryDetail extends InventoryState {
 class LoadingInventoryList extends InventoryState {
   LoadingInventoryList();
 }
+class InventorySubscriptionFailure extends InventoryState{
+  final String message;
+  InventorySubscriptionFailure(this.message);
+}

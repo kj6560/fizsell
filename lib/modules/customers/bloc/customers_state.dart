@@ -53,3 +53,7 @@ class CustomerLoaded extends CustomersState {
   final Customer customer;
   CustomerLoaded(this.customer);
 }
+class CustomerSubscriptionFailure extends CustomersState{
+  final String message;
+  CustomerSubscriptionFailure(this.message);
+}

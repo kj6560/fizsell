@@ -1,11 +1,16 @@
 library new_product_library;
+
 import 'dart:io';
 
+import 'package:android_intent_plus/android_intent.dart';
+import 'package:android_intent_plus/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:fizsell/core/widgets/base_widget.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../core/widgets/base_screen.dart';
 import '../bloc/product_bloc.dart';
@@ -37,6 +42,7 @@ class NewProductControllerState extends State<NewProductController> {
   TextEditingController skuController = TextEditingController();
   TextEditingController basePriceController = TextEditingController();
   List<File> selectedImages = [];
+  String savedImagePath = "";
 
   Future<void> pickImages(BuildContext context) async {
     final picker = ImagePicker();
@@ -54,9 +60,9 @@ class NewProductControllerState extends State<NewProductController> {
       selectedImages.remove(file);
     });
   }
+
   @override
   void initState() {
-
     super.initState();
     BlocProvider.of<ProductBloc>(context).add(LoadProductUom());
   }
@@ -69,8 +75,10 @@ class NewProductControllerState extends State<NewProductController> {
       // Set default selected UOM if not already selected
       if (selectedUom == null && dropdownItems.isNotEmpty) {
         selectedUom = dropdownItems.first;
-      }else{
-        dropdownItems = [Uom(id: 0, title: "Select UOM", slug: "", isActive: 1)];
+      } else {
+        dropdownItems = [
+          Uom(id: 0, title: "Select UOM", slug: "", isActive: 1),
+        ];
         selectedUom = dropdownItems[0];
       }
     });
@@ -103,31 +111,35 @@ class NewProductControllerState extends State<NewProductController> {
           price: price,
           base_price: basePrice,
           uom_id: selectedUom!.id,
-          selectedImages: selectedImages
+          selectedImages: selectedImages,
         ),
       );
     }
   }
 
   /// Scan Barcode
-  Future<void> scanBarcode(BuildContext context, TextEditingController skuController) async {
+  Future<void> scanBarcode(
+    BuildContext context,
+    TextEditingController skuController,
+  ) async {
     String barcodeScanRes = '';
 
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => Scaffold(
-          appBar: AppBar(title: const Text("Scan Barcode")),
-          body: MobileScanner(
-            onDetect: (barcodeCapture) {
-              final Barcode? barcode = barcodeCapture.barcodes.first;
-              if (barcode?.rawValue != null) {
-                barcodeScanRes = barcode!.rawValue!;
-                Navigator.pop(context, barcodeScanRes);
-              }
-            },
-          ),
-        ),
+        builder:
+            (context) => Scaffold(
+              appBar: AppBar(title: const Text("Scan Barcode")),
+              body: MobileScanner(
+                onDetect: (barcodeCapture) {
+                  final Barcode? barcode = barcodeCapture.barcodes.first;
+                  if (barcode?.rawValue != null) {
+                    barcodeScanRes = barcode!.rawValue!;
+                    Navigator.pop(context, barcodeScanRes);
+                  }
+                },
+              ),
+            ),
       ),
     );
 
@@ -144,7 +156,9 @@ class NewProductControllerState extends State<NewProductController> {
       return;
     }
 
-    BlocProvider.of<ProductBloc>(context).add(GenerateBarcode(barcodeValue: sku));
+    BlocProvider.of<ProductBloc>(
+      context,
+    ).add(GenerateBarcode(barcodeValue: sku));
   }
 
   /// Handle Barcode Generation Success
@@ -181,10 +195,8 @@ class NewProductControllerState extends State<NewProductController> {
 
   /// Request Storage Permission
   Future<bool> _requestStoragePermission() async {
-    Map<Permission, PermissionStatus> statuses = await [
-      Permission.storage,
-      Permission.photos,
-    ].request();
+    Map<Permission, PermissionStatus> statuses =
+        await [Permission.storage, Permission.photos].request();
 
     return statuses[Permission.storage]?.isGranted == true ||
         statuses[Permission.photos]?.isGranted == true;
@@ -208,6 +220,9 @@ class NewProductControllerState extends State<NewProductController> {
         quality: 80,
         name: "barcode_${DateTime.now().millisecondsSinceEpoch}",
       );
+      setState(() {
+        savedImagePath = result;
+      });
       return result['isSuccess'] == true;
     } catch (e) {
       return false;
@@ -216,7 +231,9 @@ class NewProductControllerState extends State<NewProductController> {
 
   /// Show Snackbar
   void _showSnackbar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -225,4 +242,29 @@ class NewProductControllerState extends State<NewProductController> {
   void onAddProductSuccess(AddProductSuccess state) {
     Navigator.pushReplacementNamed(context, "/list_product");
   }
+
+  Future<void> printBarcode(BuildContext context) async {
+    final response = await http.get(Uri.parse(barcodeImageUrl));
+    if (response.statusCode != 200) {
+      print("Failed to download image");
+      return;
+    }
+
+    Uint8List imageBytes = response.bodyBytes;
+
+    // Save the file in a shareable location
+    final dir = await getExternalStorageDirectory(); // or getTemporaryDirectory()
+    final file = File('${dir!.path}/barcode.jpg');
+    await file.writeAsBytes(imageBytes);
+
+    final xFile = XFile(file.path, mimeType: 'image/jpeg');
+
+    await Share.shareXFiles(
+      [xFile],
+      text: 'Print barcode',
+      subject: 'Barcode for RawBT',
+      sharePositionOrigin: Rect.zero,
+    );
+  }
+
 }

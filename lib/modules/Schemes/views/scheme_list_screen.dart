@@ -10,12 +10,22 @@ class SchemeListScreen
   Widget build(BuildContext context) {
     return BaseScreen(
       title: "Schemes",
-
       onFabPressed: () {
-        Navigator.popAndPushNamed(context, AppRoutes.newScheme);
+        if (controllerState.hasActiveSubscription) {
+          Navigator.popAndPushNamed(context, AppRoutes.newScheme);
+        }else{
+          showExitConfirmationDialog(context);
+        }
       },
-      body: BlocBuilder<SchemeBloc, SchemeState>(
+      body: BlocConsumer<SchemeBloc, SchemeState>(
+        listener: (context, state) {
+          // You can add side effects like showing a snackbar here if needed
+          if (state is SubscriptionFailure) {
+            controllerState.changeSubscriptionStatus(false);
+          }
+        },
         builder: (context, state) {
+          print(state);
           if (state is LoadingSchemeList) {
             return Center(
               child: Column(
@@ -47,109 +57,113 @@ class SchemeListScreen
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(
-                              color: Colors.grey,
-                            ), // Change this to your desired color
+                            borderSide: const BorderSide(color: Colors.grey),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                             borderSide: const BorderSide(
                               color: Color(0xFFB5A13F),
-                            ), // Color when focused
+                            ),
                           ),
                         ),
                         onChanged: (value) {
                           value = value.toLowerCase();
                           setState(() {
-                            filteredSchemes = allSchemes.where((scheme) {
-                              return scheme.schemeName
-                                  .toLowerCase()
-                                  .contains(value);
-                            }).toList();
+                            filteredSchemes =
+                                allSchemes.where((scheme) {
+                                  return scheme.schemeName
+                                      .toLowerCase()
+                                      .contains(value);
+                                }).toList();
                           });
                         },
                       ),
                     ),
                     Expanded(
-                      child: filteredSchemes.isEmpty
-                          ? Center(child: Text("No schemes found"))
-                          : ListView.builder(
-                              itemCount: filteredSchemes.length,
-                              itemBuilder: (context, index) {
-                                final scheme = filteredSchemes[index];
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 6),
-                                  child: Card(
-                                    elevation: 1,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16),
+                      child:
+                          filteredSchemes.isEmpty
+                              ? Center(child: Text("No schemes found"))
+                              : ListView.builder(
+                                itemCount: filteredSchemes.length,
+                                itemBuilder: (context, index) {
+                                  final scheme = filteredSchemes[index];
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 6,
                                     ),
-                                    child: InkWell(
-                                      borderRadius: BorderRadius.circular(16),
-                                      onTap: () {
-                                        Navigator.popAndPushNamed(
-                                          context,
-                                          AppRoutes.schemeDetails,
-                                          arguments: {"scheme_id": scheme.id},
-                                        );
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(16.0),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            CircleAvatar(
-                                              radius: 24,
-                                              backgroundColor:
-                                                  Colors.teal.shade100,
-                                              child: Text(
-                                                "${index + 1}",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.teal.shade900,
+                                    child: Card(
+                                      elevation: 1,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      child: InkWell(
+                                        borderRadius: BorderRadius.circular(16),
+                                        onTap: () {
+                                          Navigator.popAndPushNamed(
+                                            context,
+                                            AppRoutes.schemeDetails,
+                                            arguments: {"scheme_id": scheme.id},
+                                          );
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(16.0),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              CircleAvatar(
+                                                radius: 24,
+                                                backgroundColor:
+                                                    Colors.teal.shade100,
+                                                child: Text(
+                                                  "${index + 1}",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.teal.shade900,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            const SizedBox(width: 16),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    scheme.schemeName,
-                                                    style: TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                              const SizedBox(width: 16),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      scheme.schemeName,
+                                                      style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  const SizedBox(height: 6),
-                                                  Text(
-                                                    scheme.type,
-                                                    style: TextStyle(
-                                                      fontSize: 15,
-                                                      color: Colors.grey[700],
+                                                    const SizedBox(height: 6),
+                                                    Text(
+                                                      scheme.type,
+                                                      style: TextStyle(
+                                                        fontSize: 15,
+                                                        color: Colors.grey[700],
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              },
-                            ),
+                                  );
+                                },
+                              ),
                     ),
                   ],
                 );
               },
             );
+          } else if (state is SubscriptionFailure) {
+            return Center(child: Text(state.message));
           } else {
             return Center(child: Text("Unable to load schemes"));
           }

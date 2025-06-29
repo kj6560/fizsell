@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/config/config.dart';
 import '../../../../core/local/hive_constants.dart';
 import '../../../core/routes.dart';
+import '../../../core/widgets/SubscriptionFailure.dart';
 import '../../../core/widgets/base_screen.dart';
 import '../../../core/widgets/base_widget.dart';
 import '../../auth/models/User.dart';
@@ -26,6 +27,13 @@ class SchemeListController extends StatefulWidget {
 class SchemeListControllerState extends State<SchemeListController> {
   String name = "";
   String email = "";
+  bool hasActiveSubscription = false;
+
+  void changeSubscriptionStatus(bool status) {
+    setState(() {
+      hasActiveSubscription = status;
+    });
+  }
   @override
   void initState() {
     // TODO: implement initState

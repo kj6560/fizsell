@@ -59,7 +59,7 @@ class SettingsControllerState extends State<SettingsController> {
     if (await Permission.location.isDenied) {
       await Permission.location.request();
     }
-    context.read<SettingsBloc>().add(LoadPrinters());
+    //context.read<SettingsBloc>().add(LoadPrinters());
   }
 
   @override

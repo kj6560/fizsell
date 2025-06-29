@@ -89,3 +89,7 @@ class DeleteProductFailure extends ProductState {
 }
 
 class DeletingProduct extends ProductState {}
+class ProductSubscriptionFailure extends ProductState{
+  final String message;
+  ProductSubscriptionFailure(this.message);
+}

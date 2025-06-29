@@ -28,6 +28,8 @@ dependencies:
   print_bluetooth_thermal:
   url_launcher:
   android_intent_plus:
+  dio_curl_logger:
+  share_plus:
   intl:
   cached_network_image:
   mobile_device_identifier:

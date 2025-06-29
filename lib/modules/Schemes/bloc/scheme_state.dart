@@ -5,6 +5,11 @@ sealed class SchemeState {}
 
 final class SchemeInitial extends SchemeState {}
 
+class SubscriptionFailure extends SchemeState{
+  final String message;
+  SubscriptionFailure(this.message);
+}
+
 class LoadingSchemeList extends SchemeState {}
 
 class LoadSchemeListSuccess extends SchemeState {

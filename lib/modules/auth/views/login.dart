@@ -56,10 +56,22 @@ class Login extends WidgetView<Login, LoginControllerState> {
                               const SizedBox(height: 50),
                               TextFormField(
                                 controller: controllerState.emailController,
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   labelText: "Email",
-                                  border: OutlineInputBorder(),
-                                  prefixIcon: Icon(Icons.email),
+                                  border: const OutlineInputBorder(),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: const BorderSide(
+                                      color: Colors.grey,
+                                    ), // Change this to your desired color
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: const BorderSide(
+                                      color: Color(0xFFB5A13F),
+                                    ), // Color when focused
+                                  ),
+                                  prefixIcon: const Icon(Icons.email),
                                 ),
                                 validator: (value) {
                                   final trimmedValue = value?.trim() ?? '';
@@ -79,6 +91,18 @@ class Login extends WidgetView<Login, LoginControllerState> {
                                 decoration: InputDecoration(
                                   labelText: "Password",
                                   border: OutlineInputBorder(),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: const BorderSide(
+                                      color: Colors.grey,
+                                    ), // Change this to your desired color
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: const BorderSide(
+                                      color: Color(0xFFB5A13F),
+                                    ), // Color when focused
+                                  ),
                                   prefixIcon: Icon(Icons.lock),
                                   suffixIcon: GestureDetector(
                                     onTap: () {
