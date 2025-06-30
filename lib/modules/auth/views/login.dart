@@ -167,7 +167,7 @@ class Login extends WidgetView<Login, LoginControllerState> {
                     children: [
                       Text("Powered By Shiwkesh Schematics Private Limited"),
                       Text("All Rights Reserved"),
-                      Text('version: ${controllerState.appVersion ?? '1.0.0'}'),
+                      Text('version: ${AppConstants.AppVersion ?? '1.0.0'}'),
                     ],
                   )
                 ],

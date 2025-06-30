@@ -7,6 +7,7 @@ import 'config.dart';
 class AppConstants {
   static const String appName = "FizSell";
   static const String companyName = "Shiwkesh Schematics Private Limited";
+  static const String AppVersion = "1.0.0";
   static int? getUserRole(){
     String userJson = authBox.get(HiveKeys.userBox);
     User user = User.fromJson(jsonDecode(userJson));
