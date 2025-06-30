@@ -20,6 +20,9 @@ class SchemeListScreen
       body: BlocConsumer<SchemeBloc, SchemeState>(
         listener: (context, state) {
           // You can add side effects like showing a snackbar here if needed
+          if(state is LoadSchemeListSuccess){
+            controllerState.changeSubscriptionStatus(true);
+          }
           if (state is SubscriptionFailure) {
             controllerState.changeSubscriptionStatus(false);
           }
