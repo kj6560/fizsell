@@ -29,6 +29,7 @@ class _BaseScreenState extends State<BaseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(widget.title, style: TextStyle(color: Colors.white)),
@@ -38,16 +39,12 @@ class _BaseScreenState extends State<BaseScreen> {
       body: widget.body,
       floatingActionButton:
           widget.onFabPressed != null
-              ? Transform.translate(
-                offset: Offset(0, -40), // Shift 20 pixels upwards
-                child: FloatingActionButton(
-                  onPressed: widget.onFabPressed,
-                  backgroundColor: Colors.teal,
-                  child: Icon(widget.fabIcon, color: Colors.white),
-                ),
+              ? FloatingActionButton(
+                onPressed: widget.onFabPressed,
+                backgroundColor: Colors.teal,
+                child: Icon(widget.fabIcon, color: Colors.white),
               )
               : null,
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
