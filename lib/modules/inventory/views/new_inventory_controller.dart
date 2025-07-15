@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 import '../../../../core/config/config.dart';
 import '../../../../core/local/hive_constants.dart';
@@ -36,29 +37,10 @@ class NewInventoryControllerState extends State<NewInventoryController> {
     });
   }
 
-  Future<void> scanBarcode(BuildContext context, TextEditingController skuController) async {
-    String barcodeScanRes = '';
+  Future<void> scanBarcode(BuildContext context, TextEditingController skuController,String result) async {
 
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Scaffold(
-          appBar: AppBar(title: const Text("Scan Barcode")),
-          body: MobileScanner(
-            onDetect: (barcodeCapture) {
-              final Barcode? barcode = barcodeCapture.barcodes.first;
-              if (barcode?.rawValue != null) {
-                barcodeScanRes = barcode!.rawValue!;
-                Navigator.pop(context, barcodeScanRes);
-              }
-            },
-          ),
-        ),
-      ),
-    );
-
-    if (barcodeScanRes.isNotEmpty) {
-      skuController.text = barcodeScanRes;
+    if (result.isNotEmpty) {
+      skuController.text = result;
     }
   }
 

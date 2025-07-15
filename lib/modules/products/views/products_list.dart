@@ -19,8 +19,7 @@ class ProductsList extends WidgetView<ProductsList, ProductsListControllerState>
       title: 'Products',
       body: BlocConsumer<ProductBloc, ProductState>(
         listener: (context, state) {
-          if (state is LoadProductListFailure) {
-            print("trigger change");
+          if (state is ProductSubscriptionFailure) {
             controllerState.changeSubscriptionStatus(false);
           }else if(state is LoadProductSuccess) {
             controllerState.changeSubscriptionStatus(true);

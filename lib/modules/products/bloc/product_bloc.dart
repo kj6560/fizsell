@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -33,22 +34,24 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       String userString = await authBox.get(HiveKeys.userBox);
       String token = await authBox.get(HiveKeys.accessToken);
       User user = User.fromJson(jsonDecode(userString));
-      print('user org id: ${user.orgId}');
+      print("user role:${user.role} ");
       final response =
           await productRepositoryImpl.fetchProducts(user.orgId, token);
+
       if (response == null || response.data == null) {
         emit(LoadProductListFailure("No response from server"));
         return;
       }
-      print(response);
+
       // Ensure data is always a Map<String, dynamic>
       final data = response.data['data'] is String
           ? jsonDecode(response.data['data'])
           : response.data['data'];
-      if (response.data["subscriptionError"] == 1) {
-        emit(ProductSubscriptionFailure(response.data['message']));
-        return;
-      }
+      print("subscription status: ${data}");
+      // if (response.data["subscriptionError"] == 1) {
+      //   emit(ProductSubscriptionFailure(response.data['message']));
+      //   return;
+      // }
       final List<Product> products = productFromJson(jsonEncode(data));
 
       if (response.statusCode == 401) {
@@ -61,9 +64,13 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       }
       emit(LoadProductSuccess(products));
     } catch (e, stacktrace) {
-      print('Exception in bloc: $e');
-      print('Stacktrace: $stacktrace');
-      emit(LoadProductListFailure("An error occurred."));
+      print("exception: ${e}");
+      if (e is DioException) {
+        emit(LoadProductListFailure("Request failed: ${e.message}"));
+        print("❌ Dio error: ${e.response?.statusCode} → ${e.response?.data}");
+      } else {
+        emit(LoadProductListFailure("An error occurred."));
+      }
     }
     return;
   }
@@ -79,30 +86,38 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       double product_mrp = event.price;
       double base_price = event.base_price;
       int uom_id = event.uom_id;
+
+      print("triggering dio");
+
       final response = await productRepositoryImpl.addProducts(
-          org_id, token, name, sku, product_mrp, base_price, uom_id,event.selectedImages);
+        org_id,
+        token,
+        name,
+        sku,
+        product_mrp,
+        base_price,
+        uom_id,
+        event.selectedImages,
+      );
+
       if (response == null || response.data == null) {
         emit(AddProductFailure("No response from server"));
         return;
       }
 
-      // Ensure data is always a Map<String, dynamic>
-      final data = response.data['data'] is String
-          ? jsonDecode(response.data['data'])
-          : response.data['data'];
-      print("created product${data}");
       if (response.statusCode == 401) {
         emit(AddProductFailure("Login failed."));
         return;
       }
+
       emit(AddProductSuccess());
     } catch (e, stacktrace) {
       print('Exception in bloc: $e');
       print('Stacktrace: $stacktrace');
-      emit(AddProductFailure("An error occurred."));
+      emit(AddProductFailure("Error: ${e.toString()}"));
     }
-    return;
   }
+
 
   void _loadProductDetail(LoadProductDetail event, Emitter<ProductState> emit) async {
     try {

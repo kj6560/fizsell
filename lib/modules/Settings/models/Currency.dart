@@ -1,31 +1,31 @@
-// To parse this JSON data, do
-//
-//     final currency = currencyFromJson(jsonString);
-
 import 'dart:convert';
 
-List<Currency> currencyFromJson(String str) => List<Currency>.from(json.decode(str).map((x) => Currency.fromJson(x)));
+List<Currency> currencyFromJson(String str) =>
+    List<Currency>.from(json.decode(str).map((x) => Currency.fromJson(x)));
 
-String currencyToJson(List<Currency> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String currencyToJson(List<Currency> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Currency {
   int id;
-  String country;
-  String currency;
+  String name;            // maps to "name" in JSON
   String code;
-  int minorUnit;
-  dynamic symbol;
+  String symbol;
+  String country;
+  String numericCode;
+  int decimalDigits;
   int isActive;
   DateTime createdAt;
   DateTime updatedAt;
 
   Currency({
     required this.id,
-    required this.country,
-    required this.currency,
+    required this.name,
     required this.code,
-    required this.minorUnit,
     required this.symbol,
+    required this.country,
+    required this.numericCode,
+    required this.decimalDigits,
     required this.isActive,
     required this.createdAt,
     required this.updatedAt,
@@ -33,11 +33,12 @@ class Currency {
 
   factory Currency.fromJson(Map<String, dynamic> json) => Currency(
     id: json["id"],
-    country: json["country"],
-    currency: json["currency"],
+    name: json["name"],
     code: json["code"],
-    minorUnit: json["minor_unit"],
     symbol: json["symbol"],
+    country: json["country"],
+    numericCode: json["numeric_code"],
+    decimalDigits: json["decimal_digits"],
     isActive: json["is_active"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
@@ -45,11 +46,12 @@ class Currency {
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "country": country,
-    "currency": currency,
+    "name": name,
     "code": code,
-    "minor_unit": minorUnit,
     "symbol": symbol,
+    "country": country,
+    "numeric_code": numericCode,
+    "decimal_digits": decimalDigits,
     "is_active": isActive,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),

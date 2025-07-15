@@ -13,20 +13,25 @@ class LoadProductList extends ProductEvent {
 
 class AddNewProduct extends ProductEvent {
   final String name;
+  final String sku;
   final double price;
   final double base_price;
-  final String sku;
   final int uom_id;
-  final List<File>selectedImages;
-  const AddNewProduct(
-      {required this.name,
-      required this.price,
-      required this.sku,
-      required this.base_price,
-      required this.uom_id,
-      required this.selectedImages
-      });
+  final List<File> selectedImages;
+
+  AddNewProduct({
+    required this.name,
+    required this.sku,
+    required this.price,
+    required this.base_price,
+    required this.uom_id,
+    required this.selectedImages,
+  });
+
+  @override
+  List<Object> get props => [name, sku, price, base_price, uom_id]; // ✅ exclude files
 }
+
 
 class DeleteProduct extends ProductEvent {
   final int id;

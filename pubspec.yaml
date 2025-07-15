@@ -32,6 +32,7 @@ dependencies:
   share_plus:
   intl:
   cached_network_image:
+  simple_barcode_scanner: ^0.3.0
   mobile_device_identifier:
   printing: ^5.14.2
   pdf:

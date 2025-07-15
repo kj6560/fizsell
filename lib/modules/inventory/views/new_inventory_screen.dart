@@ -21,11 +21,24 @@ class NewInventoryScreen
                     width: 150,
                     height: 30,
                     child: ElevatedButton(
-                      onPressed: () {
-                        controllerState.scanBarcode(context,controllerState.skuController);
+                      onPressed: () async {
+                        String? res = await SimpleBarcodeScanner.scanBarcode(
+                          context,
+                          barcodeAppBar: const BarcodeAppBar(
+                            appBarTitle: 'Test',
+                            centerTitle: false,
+                            enableBackButton: true,
+                            backButtonIcon: Icon(Icons.arrow_back_ios),
+                          ),
+                          isShowFlashIcon: true,
+                          delayMillis: 500,
+                          cameraFace: CameraFace.back,
+                          scanFormat: ScanFormat.ONLY_BARCODE,
+                        );
+                        print("scan result: ${res}");
+                        controllerState.scanBarcode(context,controllerState.skuController,res as String);
                       },
-                      child:
-                          Text('Scan Barcode', style: TextStyle(fontSize: 18)),
+                      child: const Text('Scan Barcode'),
                     ),
                   ),
                   Padding(

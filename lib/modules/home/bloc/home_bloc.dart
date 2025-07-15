@@ -30,7 +30,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   void _loadHome(HomeLoad event, Emitter<HomeState> emit) async {
     try {
       emit(LoadingHome());
-      print("loading");
       String userString = await authBox.get(HiveKeys.userBox);
       String token = await authBox.get(HiveKeys.accessToken);
       User user = User.fromJson(jsonDecode(userString));

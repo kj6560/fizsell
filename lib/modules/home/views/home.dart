@@ -72,7 +72,6 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
                     }
                   },
                 ),
-
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: const Center(
@@ -87,8 +86,10 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
                   child: BlocConsumer<ProductBloc, ProductState>(
                     listener: (context, state) {
                       // You can handle additional product-specific side effects here if needed
+                      print(state);
                     },
                     builder: (context, state) {
+                      print("state: ${state}");
                       if (state is LoadingProductList) {
                         return const Center(child: CircularProgressIndicator(color: Colors.blue,));
                       } else if (state is LoadProductSuccess) {

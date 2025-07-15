@@ -130,14 +130,34 @@ class NewProduct extends WidgetView<NewProduct, NewProductControllerState> {
                     const SizedBox(height: 10),
 
                     /// Scan Barcode Button
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          controllerState.scanBarcode(context, controllerState.skuController);
-                        },
-                        child: const Text('Scan Barcode', style: TextStyle(fontSize: 16)),
-                      ),
+                    // SizedBox(
+                    //   width: double.infinity,
+                    //   child: ElevatedButton(
+                    //     onPressed: () {
+                    //       controllerState.scanBarcode(context, controllerState.skuController);
+                    //     },
+                    //     child: const Text('Scan Barcode', style: TextStyle(fontSize: 16)),
+                    //   ),
+                    // ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        String? res = await SimpleBarcodeScanner.scanBarcode(
+                          context,
+                          barcodeAppBar: const BarcodeAppBar(
+                            appBarTitle: 'Test',
+                            centerTitle: false,
+                            enableBackButton: true,
+                            backButtonIcon: Icon(Icons.arrow_back_ios),
+                          ),
+                          isShowFlashIcon: true,
+                          delayMillis: 500,
+                          cameraFace: CameraFace.back,
+                          scanFormat: ScanFormat.ONLY_BARCODE,
+                        );
+                        print("scan result: ${res}");
+                        controllerState.newScanBarcode(context, controllerState.skuController,res as String);
+                      },
+                      child: const Text('Scan Barcode'),
                     ),
                     const SizedBox(height: 10),
 

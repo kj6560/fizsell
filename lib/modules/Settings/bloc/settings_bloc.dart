@@ -94,7 +94,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
               : response.data['data'];
       final selectedId =
       response.data['selected'] != null || response.data['selected'] != ""
-          ? int.parse(response.data['selected'])
+          ? response.data['selected']
           : 0;
       print("data is: ${response.data['selected']}");
       final List<Currency> currencies = currencyFromJson(jsonEncode(data));
@@ -103,7 +103,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         emit(LoadCurrenciesFailure("Login failed."));
         return;
       }
-      emit(LoadCurrenciesSuccess(currencies,selectedId));
+      emit(LoadCurrenciesSuccess(currencies,int.parse(selectedId)));
     } catch (e, stacktrace) {
       print('Exception in bloc: $e');
       print('Stacktrace: $stacktrace');

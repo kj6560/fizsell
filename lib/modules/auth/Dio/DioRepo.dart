@@ -15,7 +15,8 @@ class AuthRepositoryImpl {
       options: Options(contentType: "application/json"),
       data: jsonEncode(body),
     );
-
+    print('✅ Status: ${response.statusCode}');
+    print('✅ Response Data: ${response.data}');
     return response;
   }
 

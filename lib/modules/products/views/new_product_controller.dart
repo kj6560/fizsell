@@ -11,6 +11,9 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:fizsell/core/widgets/base_widget.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:simple_barcode_scanner/barcode_appbar.dart';
+import 'package:simple_barcode_scanner/enum.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 import '../../../core/widgets/base_screen.dart';
 import '../bloc/product_bloc.dart';
@@ -118,36 +121,16 @@ class NewProductControllerState extends State<NewProductController> {
   }
 
   /// Scan Barcode
-  Future<void> scanBarcode(
-    BuildContext context,
-    TextEditingController skuController,
-  ) async {
-    String barcodeScanRes = '';
 
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder:
-            (context) => Scaffold(
-              appBar: AppBar(title: const Text("Scan Barcode")),
-              body: MobileScanner(
-                onDetect: (barcodeCapture) {
-                  final Barcode? barcode = barcodeCapture.barcodes.first;
-                  if (barcode?.rawValue != null) {
-                    barcodeScanRes = barcode!.rawValue!;
-                    Navigator.pop(context, barcodeScanRes);
-                  }
-                },
-              ),
-            ),
-      ),
-    );
-
-    if (barcodeScanRes.isNotEmpty) {
-      skuController.text = barcodeScanRes;
+  Future<void> newScanBarcode(
+      BuildContext context,
+      TextEditingController skuController,
+      String result
+      ) async {
+    if (result.isNotEmpty) {
+      skuController.text = result;
     }
   }
-
   /// Generate Barcode
   void generateBarcode() {
     String sku = skuController.text.trim();

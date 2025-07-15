@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 import '../../../../core/config/config.dart';
 import '../../../../core/local/hive_constants.dart';
@@ -29,25 +30,85 @@ class NewSaleController extends StatefulWidget {
 }
 
 class NewSaleControllerState extends State<NewSaleController> {
-
-  Future<void> scanBarcode(BuildContext context, TextEditingController skuController) async {
+  Future<void> scanBarcode(
+    BuildContext context,
+    TextEditingController skuController,
+  ) async {
     String barcodeScanRes = '';
-
+    TextEditingController skuFieldController = TextEditingController();
     await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => Scaffold(
-          appBar: AppBar(title: const Text("Scan Barcode")),
-          body: MobileScanner(
-            onDetect: (barcodeCapture) {
-              final Barcode? barcode = barcodeCapture.barcodes.first;
-              if (barcode?.rawValue != null) {
-                barcodeScanRes = barcode!.rawValue!;
-                Navigator.pop(context, barcodeScanRes);
-              }
-            },
-          ),
-        ),
+        builder:
+            (context) => Scaffold(
+              appBar: AppBar(title: const Text("Product Sku")),
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        String? res = await SimpleBarcodeScanner.scanBarcode(
+                          context,
+                          barcodeAppBar: const BarcodeAppBar(
+                            appBarTitle: 'Order',
+                            centerTitle: false,
+                            enableBackButton: true,
+                            backButtonIcon: Icon(Icons.arrow_back_ios),
+                          ),
+                          isShowFlashIcon: true,
+                          delayMillis: 500,
+                          cameraFace: CameraFace.back,
+                          scanFormat: ScanFormat.ONLY_BARCODE,
+                        );
+                        print("scan result: ${res}");
+                        setState(() {
+                          barcodeScanRes = res as String;
+                        });
+                      },
+                      child: const Text('Scan Barcode'),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text("OR"),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      controller: skuFieldController,
+                      decoration: InputDecoration(
+                        labelText: "Enter Sku",
+                        border: OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                          ), // Change this to your desired color
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFB5A13F),
+                          ), // Color when focused
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(onPressed: (){
+                      setState(() {
+                        barcodeScanRes = skuFieldController.text;
+                      });
+                      Navigator.pop(context);
+                    }, child: Text("Submit")),
+                  )
+                ],
+              ),
+            ),
       ),
     );
 
@@ -55,7 +116,6 @@ class NewSaleControllerState extends State<NewSaleController> {
       skuController.text = barcodeScanRes;
     }
   }
-
 
   final formKey = GlobalKey<FormState>();
   List<NewOrder> orders = [];
@@ -89,19 +149,21 @@ class NewSaleControllerState extends State<NewSaleController> {
   void updateOrder(NewOrder newOrder) {
     setState(() {
       // Check if the SKU already exists in the list
-      int existingIndex =
-          orders.indexWhere((order) => order.sku == newOrder.sku);
+      int existingIndex = orders.indexWhere(
+        (order) => order.sku == newOrder.sku,
+      );
 
       if (existingIndex != -1) {
         // SKU exists, update the quantity
         orders[existingIndex] = NewOrder(
-            product_name: orders[existingIndex].product_name,
-            product_mrp: orders[existingIndex].product_mrp,
-            sku: orders[existingIndex].sku,
-            quantity: orders[existingIndex].quantity + newOrder.quantity,
-            discount: orders[existingIndex].discount,
-            tax: orders[existingIndex].tax,
-            schemes: orders[existingIndex].schemes);
+          product_name: orders[existingIndex].product_name,
+          product_mrp: orders[existingIndex].product_mrp,
+          sku: orders[existingIndex].sku,
+          quantity: orders[existingIndex].quantity + newOrder.quantity,
+          discount: orders[existingIndex].discount,
+          tax: orders[existingIndex].tax,
+          schemes: orders[existingIndex].schemes,
+        );
       } else {
         // SKU doesn't exist, add a new order
         orders.add(newOrder);
@@ -117,10 +179,13 @@ class NewSaleControllerState extends State<NewSaleController> {
     } else if (selectedValue == "Credit") {
       payMethod = 2;
     }
-    BlocProvider.of<SalesBloc>(context).add(NewSale(
+    BlocProvider.of<SalesBloc>(context).add(
+      NewSale(
         payload: newOrderToJson(orders),
         payment_method: payMethod,
-        customer_id: selectedUser!.id));
+        customer_id: selectedUser!.id,
+      ),
+    );
     return true;
   }
 
@@ -130,8 +195,9 @@ class NewSaleControllerState extends State<NewSaleController> {
   void removeOrderItem(NewOrder newOrder) {
     setState(() {
       // Check if the SKU already exists in the list
-      int existingIndex =
-          orders.indexWhere((order) => order.sku == newOrder.sku);
+      int existingIndex = orders.indexWhere(
+        (order) => order.sku == newOrder.sku,
+      );
 
       if (existingIndex != -1) {
         // SKU exists, update the quantity

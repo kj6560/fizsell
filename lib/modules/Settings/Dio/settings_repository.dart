@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:dio_curl_logger/dio_curl_logger.dart';
 
 import '../../../../core/config/endpoints.dart';
 
@@ -12,7 +13,14 @@ class SettingsRepositoryImpl {
 
   Future<Response?> fetchCurrencies(String token) async {
     try {
-
+      if (!dio.interceptors.any((i) => i is CurlLoggingInterceptor)) {
+        dio.interceptors.add(
+          CurlLoggingInterceptor(
+            showRequestLog: true,
+            showResponseLog: true,
+          ),
+        );
+      }
       Response response = await dio.get(
         EndPoints.fetchCurrencies,
         options: Options(
@@ -33,13 +41,20 @@ class SettingsRepositoryImpl {
   }
 
 
-  Future<Response?> setCurrency(
-      int org_id, String token, int currency_id) async {
+  Future<Response?> setCurrency(int org_id, String token, int currency_id) async {
     try {
       var payload = {
-        "org_id":org_id,
-        "currency_id":currency_id
+        "org_id": org_id,
+        "currency_id": currency_id
       };
+      if (!dio.interceptors.any((i) => i is CurlLoggingInterceptor)) {
+        dio.interceptors.add(
+          CurlLoggingInterceptor(
+            showRequestLog: true,
+            showResponseLog: true,
+          ),
+        );
+      }
       Response response = await dio.post(
         EndPoints.setCurrency,
         options: Options(
@@ -51,12 +66,14 @@ class SettingsRepositoryImpl {
         ),
         data: jsonEncode(payload),
       );
+
       return response;
     } catch (e, stacktrace) {
       print(e.toString());
       print(stacktrace);
     }
   }
+
 
 
 }

@@ -26,20 +26,28 @@ class CurrencySettingsScreen
             final filteredList =
                 controllerState._currencies
                     .where(
-                      (c) => c.currency.toLowerCase().contains(
+                      (c) => c.name.toLowerCase().contains(
                         controllerState.searchQuery.toLowerCase(),
                       ),
                     )
                     .toList();
-            final selectedCurrency = controllerState._currencies.firstWhere(
-                  (c) => c.id == controllerState.selectedCurrencyId
-            );
+            final selectedCurrency =
+                controllerState.selectedCurrencyId != 0
+                    ? controllerState._currencies.firstWhere(
+                      (c) => c.id == controllerState.selectedCurrencyId,
+                    )
+                    : null;
             return Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text("${selectedCurrency.code} ${selectedCurrency.currency} ${selectedCurrency.country} ",style: TextStyle(fontSize: 18),),
-                ),
+                selectedCurrency != null
+                    ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "${selectedCurrency.code} ${selectedCurrency.name} ${selectedCurrency.country}",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    )
+                    : SizedBox.shrink(),
                 Padding(
                   padding: const EdgeInsets.all(12),
                   child: TextField(
@@ -67,7 +75,7 @@ class CurrencySettingsScreen
                               final id = currency.id;
                               final code = currency.code;
                               final symbol = currency.symbol ?? "";
-                              final mCurrency = currency.currency;
+                              final mCurrency = currency.name;
                               final mCountry = currency.country;
                               final selected =
                                   id == controllerState.selectedCurrencyId;
@@ -78,7 +86,9 @@ class CurrencySettingsScreen
                                       : Icons.radio_button_off,
                                   color: Colors.teal,
                                 ),
-                                title: Text("$code ($symbol) - $mCurrency($mCountry)"),
+                                title: Text(
+                                  "$code ($symbol) - $mCurrency($mCountry)",
+                                ),
                                 onTap:
                                     () => controllerState._onCurrencySelected(
                                       currency,
@@ -87,9 +97,12 @@ class CurrencySettingsScreen
                             },
                           ),
                 ),
-                ElevatedButton(onPressed: () {
-                  controllerState.setCurrency();
-                }, child: Text("set Currency")),
+                ElevatedButton(
+                  onPressed: () {
+                    controllerState.setCurrency();
+                  },
+                  child: Text("set Currency"),
+                ),
               ],
             );
           }
@@ -107,9 +120,12 @@ class CurrencySettingsScreen
         },
         listener: (context, state) {
           if (state is LoadCurrenciesSuccess) {
-            controllerState.updateCurrencies(state.currencies,state.selectedCurrency);
+            controllerState.updateCurrencies(
+              state.currencies,
+              state.selectedCurrency,
+            );
           }
-          if(state is CurrencySetSuccessful){
+          if (state is CurrencySetSuccessful) {
             controllerState.updated();
           }
         },
