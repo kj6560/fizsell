@@ -119,7 +119,8 @@ class CustomersListScreen
                                     ),
                                     child: InkWell(
                                       onTap: () {
-                                        final result = Navigator.pushNamed(
+                                        print("about to edit ${customer.id}");
+                                        Navigator.pushNamed(
                                           context,
                                           AppRoutes.editCustomer,
                                           arguments: {

@@ -249,8 +249,8 @@ class CustomersBloc extends Bloc<CustomersEvent, CustomersState> {
       int customer_type = event.customer_type;
 
       final response = await customerRepositoryImpl.updateCustomers(
-        user.orgId!,
         id,
+        user.orgId!,
         customer_name,
         customer_address,
         customer_phone_number,

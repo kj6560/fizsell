@@ -16,14 +16,13 @@ class EditCustomerScreen
           if (state is UpdateCustomerSuccess ||
               state is NewCustomerCreateSuccess) {
             controllerState.hasApiResponse(state);
-
           }
           if (state is CustomerLoaded) {
             controllerState.customerUpdate(state.customer);
           } else if (state is NewCustomerCreateFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("No Customer Image selected")),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text("${state.error}")));
           }
         },
         builder: (context, state) {

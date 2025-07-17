@@ -121,7 +121,7 @@ class EditCustomerControllerState extends State<EditCustomerController> {
 
     // Use the existing image if no new image is selected
     var customer_image = _image;
-
+    print(customer_id);
     BlocProvider.of<CustomersBloc>(context).add(
       UpdateCustomer(
         id: customer_id,

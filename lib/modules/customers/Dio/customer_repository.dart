@@ -105,9 +105,6 @@ class CustomerRepositoryImpl {
             'Accept': 'application/json',
             'Authorization': 'Bearer $token',
           },
-          validateStatus: (status) {
-            return true; // Accept all status codes (no exception will be thrown)
-          },
         ),
         data: formData,
 
@@ -136,6 +133,15 @@ class CustomerRepositoryImpl {
     String token,
   ) async {
     try {
+      print({
+        'org_id': org_id,
+        'customer_id': customer_id,
+        'customer_name': customer_name,
+        'customer_address': customer_address,
+        'customer_phone_number': customer_phone_number,
+        'customer_type':customer_type,
+        'customer_active': customer_active,
+      });
       FormData formData = FormData.fromMap({
         'org_id': org_id,
         'customer_id': customer_id,
