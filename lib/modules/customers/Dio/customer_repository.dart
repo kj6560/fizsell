@@ -169,10 +169,11 @@ class CustomerRepositoryImpl {
             'Accept': 'application/json',
             'Authorization': 'Bearer $token',
           },
+          validateStatus: (status) => true,
         ),
         data: formData,
       );
-
+      print("status code: ${response.statusCode}");
       return response;
     } catch (e) {
       if (e is DioException) {

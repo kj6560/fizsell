@@ -269,7 +269,12 @@ class CustomersBloc extends Bloc<CustomersEvent, CustomersState> {
           response.data['data'] is String
               ? jsonDecode(response.data['data'])
               : response.data['data'];
-      print(data);
+      print("status  code: ${response.statusCode}");
+      if (response.statusCode == 422) {
+        print("response at 422: ${response.data['message']}");
+        emit(NewCustomerCreateFailure(response.data['message']));
+        return;
+      }
       final Customer customers = Customer.fromJson(data);
 
       if (response.statusCode == 401) {

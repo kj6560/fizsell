@@ -93,9 +93,9 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
               ? jsonDecode(response.data['data'])
               : response.data['data'];
       final selectedId =
-      response.data['selected'] != null || response.data['selected'] != ""
-          ? response.data['selected']
-          : 0;
+          response.data['selected'] != null || response.data['selected'] != ""
+              ? response.data['selected']
+              : 0;
       print("data is: ${response.data['selected']}");
       final List<Currency> currencies = currencyFromJson(jsonEncode(data));
 
@@ -103,7 +103,12 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         emit(LoadCurrenciesFailure("Login failed."));
         return;
       }
-      emit(LoadCurrenciesSuccess(currencies,int.parse(selectedId)));
+      emit(
+        LoadCurrenciesSuccess(
+          currencies,
+          selectedId == 0 ? 0 : int.parse(selectedId),
+        ),
+      );
     } catch (e, stacktrace) {
       print('Exception in bloc: $e');
       print('Stacktrace: $stacktrace');
@@ -112,8 +117,10 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     return;
   }
 
-  FutureOr<void> _setCurrency(SetCurrency event, Emitter<SettingsState> emit) async {
-
+  FutureOr<void> _setCurrency(
+    SetCurrency event,
+    Emitter<SettingsState> emit,
+  ) async {
     try {
       emit(SettingCurrency());
       String userString = await authBox.get(HiveKeys.userBox);
@@ -121,7 +128,11 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       User user = User.fromJson(jsonDecode(userString));
       int orgId = user.orgId;
       int currencyId = event.currencyId;
-      final response = await settingsRepositoryImpl.setCurrency(orgId,token,currencyId);
+      final response = await settingsRepositoryImpl.setCurrency(
+        orgId,
+        token,
+        currencyId,
+      );
       if (response == null || response.data == null) {
         emit(CurrencySetFailure("No response from server"));
         return;
@@ -129,10 +140,10 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
       // Ensure data is always a Map<String, dynamic>
       final data =
-      response.data['data'] is String
-          ? jsonDecode(response.data['message'])
-          : response.data['message'];
-      
+          response.data['data'] is String
+              ? jsonDecode(response.data['message'])
+              : response.data['message'];
+
       if (response.statusCode == 401) {
         emit(CurrencySetFailure("Login failed."));
         return;
