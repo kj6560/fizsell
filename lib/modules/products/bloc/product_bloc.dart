@@ -26,6 +26,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<LoadProductUom>(_loadProductUom);
     on<GenerateBarcode>(_generateBarcode);
     on<DeleteProduct>(_deleteProduct);
+    on<ResetProductState>((event, emit) {
+      emit(ProductInitial()); // or your custom initial state
+    });
   }
 
   void _loadProduct(LoadProductList event, Emitter<ProductState> emit) async {
@@ -34,7 +37,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       String userString = await authBox.get(HiveKeys.userBox);
       String token = await authBox.get(HiveKeys.accessToken);
       User user = User.fromJson(jsonDecode(userString));
-      print("user role:${user.role} ");
+
       final response =
           await productRepositoryImpl.fetchProducts(user.orgId, token);
 

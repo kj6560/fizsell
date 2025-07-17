@@ -41,6 +41,7 @@ class CustomersListScreen
           }
         },
         builder: (context, state) {
+          print("current state customers: ${state}");
           if (state is LoadingCustomers) {
             return Center(
               child: Column(
@@ -118,13 +119,16 @@ class CustomersListScreen
                                     ),
                                     child: InkWell(
                                       onTap: () {
-                                        Navigator.popAndPushNamed(
+                                        final result = Navigator.pushNamed(
                                           context,
                                           AppRoutes.editCustomer,
                                           arguments: {
                                             "customer_id": customer.id,
                                           },
-                                        );
+                                        ).then((_) {
+                                          // Re-fetch the product list when coming back
+                                          controllerState.reset();
+                                        });
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.all(12.0),

@@ -79,6 +79,6 @@ class ProductDetailControllerState extends State<ProductDetailController> {
   }
 
   void postDelete() {
-    Navigator.popAndPushNamed(context, AppRoutes.listProduct);
+    Navigator.pushNamed(context, AppRoutes.listProduct);
   }
 }

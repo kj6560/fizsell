@@ -37,6 +37,7 @@ class EditCustomerControllerState extends State<EditCustomerController> {
       selectedCustomerType = newType;
     });
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -78,8 +79,9 @@ class EditCustomerControllerState extends State<EditCustomerController> {
           customer_id = _customer_id;
         });
         print("loading product data");
-        BlocProvider.of<CustomersBloc>(context)
-            .add(LoadCustomer(customer_id: customer_id));
+        BlocProvider.of<CustomersBloc>(
+          context,
+        ).add(LoadCustomer(customer_id: customer_id));
       } else {
         print("❌ Arguments exist but 'sales_id' is missing.");
       }
@@ -120,15 +122,17 @@ class EditCustomerControllerState extends State<EditCustomerController> {
     // Use the existing image if no new image is selected
     var customer_image = _image;
 
-    BlocProvider.of<CustomersBloc>(context).add(UpdateCustomer(
-      id: customer_id,
-      customer_name: customer_name,
-      customer_address: customer_address,
-      customer_phone_number: customer_phone_number,
-      customer_image: customer_image,
-      customer_active: customer_active,
-      customer_type: int.parse(selectedCustomerType!)
-    ));
+    BlocProvider.of<CustomersBloc>(context).add(
+      UpdateCustomer(
+        id: customer_id,
+        customer_name: customer_name,
+        customer_address: customer_address,
+        customer_phone_number: customer_phone_number,
+        customer_image: customer_image,
+        customer_active: customer_active,
+        customer_type: int.parse(selectedCustomerType!),
+      ),
+    );
   }
 
   @override
@@ -138,7 +142,7 @@ class EditCustomerControllerState extends State<EditCustomerController> {
   }
 
   void hasApiResponse(CustomersState state) {
-    Navigator.popAndPushNamed(context, AppRoutes.listCustomers);
+    Navigator.popAndPushNamed(context, AppRoutes.listCustomers, result: true);
   }
 
   void customerUpdate(Customer _customer) {

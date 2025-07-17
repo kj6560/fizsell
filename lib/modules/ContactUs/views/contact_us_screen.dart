@@ -127,7 +127,7 @@ class ContactUsScreen extends WidgetView<ContactUsScreen, ContactUsControllerSta
           IconButton(
             icon: Icon(Icons.list, color: Colors.white60),
             onPressed: () {
-              Navigator.popAndPushNamed(context, AppRoutes.contactUsResponses);
+              Navigator.pushNamed(context, AppRoutes.contactUsResponses);
               print("Contact responses");
             },
           ),

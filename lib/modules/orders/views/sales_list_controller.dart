@@ -10,6 +10,7 @@ import '../../../../core/local/hive_constants.dart';
 import '../../../../core/routes.dart';
 import '../../../../core/widgets/base_screen.dart';
 import '../../../../core/widgets/base_widget.dart';
+import '../../../core/utils/Helpers.dart';
 import '../../auth/models/User.dart';
 import '../bloc/sales_bloc.dart';
 import '../models/sales_model.dart';
@@ -35,7 +36,9 @@ class SalesListControllerState extends State<SalesListController> {
     initAuthCred();
     BlocProvider.of<SalesBloc>(context).add(LoadSalesList());
   }
-
+  void reset() {
+    BlocProvider.of<SalesBloc>(context).add(LoadSalesList());
+  }
   void initAuthCred() async {
     String userJson = authBox.get(HiveKeys.userBox);
     User user = User.fromJson(jsonDecode(userJson));

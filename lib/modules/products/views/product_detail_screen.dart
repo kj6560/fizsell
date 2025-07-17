@@ -11,7 +11,7 @@ class ProductDetailScreen
 
       fabIcon: Icons.edit,
       onFabPressed: () {
-        Navigator.popAndPushNamed(
+        Navigator.pushNamed(
           context,
           AppRoutes.editProduct,
           arguments: {

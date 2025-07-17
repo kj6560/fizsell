@@ -40,7 +40,9 @@ class CustomersListControllerState extends State<CustomersListController> {
     initAuthCred();
     BlocProvider.of<CustomersBloc>(context).add(LoadCustomers());
   }
-
+  void reset(){
+    BlocProvider.of<CustomersBloc>(context).add(LoadCustomers());
+  }
   void initAuthCred() async {
     String userJson = authBox.get(HiveKeys.userBox);
     User user = User.fromJson(jsonDecode(userJson));

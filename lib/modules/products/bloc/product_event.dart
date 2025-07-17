@@ -10,7 +10,7 @@ abstract class ProductEvent extends Equatable {
 class LoadProductList extends ProductEvent {
   const LoadProductList();
 }
-
+class ResetProductState extends ProductEvent {}
 class AddNewProduct extends ProductEvent {
   final String name;
   final String sku;

@@ -4,7 +4,7 @@ import 'package:fizsell/modules/ContactUs/views/contact_us_controller.dart';
 import 'package:fizsell/modules/ContactUs/views/contact_us_responses_controller.dart';
 import 'package:fizsell/modules/Users/views/new_user_controller.dart';
 import 'package:fizsell/modules/Users/views/users_list_controller.dart';
-import 'package:fizsell/modules/home/views/home.dart';
+import 'package:fizsell/modules/home/views/home_old.dart';
 import 'package:fizsell/modules/home/views/home_controller.dart';
 import 'package:fizsell/modules/products/views/ProductsListController.dart';
 import 'package:fizsell/modules/products/views/products_list.dart';

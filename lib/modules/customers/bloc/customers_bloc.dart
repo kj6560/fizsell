@@ -12,6 +12,7 @@ import '../Dio/customer_repository.dart';
 import '../models/customers_model.dart';
 
 part 'customers_event.dart';
+
 part 'customers_state.dart';
 
 class CustomersBloc extends Bloc<CustomersEvent, CustomersState> {
@@ -26,24 +27,29 @@ class CustomersBloc extends Bloc<CustomersEvent, CustomersState> {
   }
 
   void _loadCustomersList(
-      LoadCustomersList event, Emitter<CustomersState> emit) async {
+    LoadCustomersList event,
+    Emitter<CustomersState> emit,
+  ) async {
     try {
       emit(LoadingCustomers());
       String userString = await authBox.get(HiveKeys.userBox);
       String token = await authBox.get(HiveKeys.accessToken);
       User user = User.fromJson(jsonDecode(userString));
       print('user org id: ${user.orgId}');
-      final response =
-          await customerRepositoryImpl.fetchCustomers(user.orgId!, token);
+      final response = await customerRepositoryImpl.fetchCustomers(
+        user.orgId!,
+        token,
+      );
       if (response == null || response.data == null) {
         emit(LoadCustomersFailure("No response from server"));
         return;
       }
 
       // Ensure data is always a Map<String, dynamic>
-      final data = response.data['data'] is String
-          ? jsonDecode(response.data['data'])
-          : response.data['data'];
+      final data =
+          response.data['data'] is String
+              ? jsonDecode(response.data['data'])
+              : response.data['data'];
       if (response.data["subscriptionError"] == 1) {
         emit(CustomerSubscriptionFailure(response.data['message']));
         return;
@@ -51,16 +57,17 @@ class CustomersBloc extends Bloc<CustomersEvent, CustomersState> {
       if (data is List<Map<String, dynamic>>) {}
       final List<Customer> customers = customerFromJson(jsonEncode(data));
       Customer falseCustomer = Customer(
-          id: 0,
-          orgId: 0,
-          customerName: "Select Customer",
-          customerAddress: "",
-          customerPhoneNumber: "",
-          customerPic: "customerPic",
-          customerActive: 1,
-          customerType: 0,
-          createdAt: "createdAt",
-          updatedAt: "updatedAt");
+        id: 0,
+        orgId: 0,
+        customerName: "Select Customer",
+        customerAddress: "",
+        customerPhoneNumber: "",
+        customerPic: "customerPic",
+        customerActive: 1,
+        customerType: 0,
+        createdAt: "createdAt",
+        updatedAt: "updatedAt",
+      );
       customers.insert(0, falseCustomer);
       print(response.statusCode);
       if (response.statusCode == 401) {
@@ -89,17 +96,21 @@ class CustomersBloc extends Bloc<CustomersEvent, CustomersState> {
       print('user org id: ${user.orgId}');
       int customer_id = event.customer_id;
       print("customer id: ${customer_id}");
-      final response = await customerRepositoryImpl
-          .fetchCustomers(user.orgId!, token, customerId: customer_id);
+      final response = await customerRepositoryImpl.fetchCustomers(
+        user.orgId!,
+        token,
+        customerId: customer_id,
+      );
       if (response == null || response.data == null) {
         emit(LoadCustomersFailure("No response from server"));
         return;
       }
 
       // Ensure data is always a Map<String, dynamic>
-      final data = response.data['data'] is String
-          ? jsonDecode(response.data['data'])
-          : response.data['data'];
+      final data =
+          response.data['data'] is String
+              ? jsonDecode(response.data['data'])
+              : response.data['data'];
       print(data);
 
       Customer customer = Customer.fromJson(data);
@@ -128,17 +139,20 @@ class CustomersBloc extends Bloc<CustomersEvent, CustomersState> {
       String token = await authBox.get(HiveKeys.accessToken);
       User user = User.fromJson(jsonDecode(userString));
       print('user org id: ${user.orgId}');
-      final response =
-          await customerRepositoryImpl.fetchCustomers(user.orgId!, token);
+      final response = await customerRepositoryImpl.fetchCustomers(
+        user.orgId!,
+        token,
+      );
       if (response == null || response.data == null) {
         emit(LoadCustomersFailure("No response from server"));
         return;
       }
 
       // Ensure data is always a Map<String, dynamic>
-      final data = response.data['data'] is String
-          ? jsonDecode(response.data['data'])
-          : response.data['data'];
+      final data =
+          response.data['data'] is String
+              ? jsonDecode(response.data['data'])
+              : response.data['data'];
       if (response.data["subscriptionError"] == 1) {
         emit(CustomerSubscriptionFailure(response.data['message']));
         return;
@@ -163,7 +177,9 @@ class CustomersBloc extends Bloc<CustomersEvent, CustomersState> {
   }
 
   void _newCustomer(
-      NewCustomerCreate event, Emitter<CustomersState> emit) async {
+    NewCustomerCreate event,
+    Emitter<CustomersState> emit,
+  ) async {
     try {
       emit(CreatingNewCustomer());
       String userString = await authBox.get(HiveKeys.userBox);
@@ -172,32 +188,38 @@ class CustomersBloc extends Bloc<CustomersEvent, CustomersState> {
       String customer_name = event.customer_name;
       String customer_address = event.customer_address;
       String customer_phone_number = event.customer_phone_number;
-      File customer_image = event.customer_image;
+      File? customer_image = event.customer_image;
       int customer_active = event.customer_active;
       int customer_type = event.customer_type;
       final response = await customerRepositoryImpl.createCustomers(
-          user.orgId!,
-          customer_name,
-          customer_address,
-          customer_phone_number,
-          customer_image,
-          customer_active,
-          customer_type,
-          token);
+        user.orgId!,
+        customer_name,
+        customer_address,
+        customer_phone_number,
+        customer_image != null ? customer_image : null,
+        customer_active,
+        customer_type,
+        token,
+      );
       if (response == null || response.data == null) {
         emit(NewCustomerCreateFailure("No response from server"));
         return;
       }
 
       // Ensure data is always a Map<String, dynamic>
-      final data = response.data['data'] is String
-          ? jsonDecode(response.data['data'])
-          : response.data['data'];
+      final data =
+          response.data['data'] is String
+              ? jsonDecode(response.data['data'])
+              : response.data['data'];
       print(data);
       final Customer customers = Customer.fromJson(data);
 
       if (response.statusCode == 401) {
         emit(NewCustomerCreateFailure("Login failed."));
+        return;
+      }
+      if (response.statusCode == 422) {
+        emit(NewCustomerCreateFailure(response.data['message']));
         return;
       }
       emit(NewCustomerCreateSuccess(customers));
@@ -210,7 +232,9 @@ class CustomersBloc extends Bloc<CustomersEvent, CustomersState> {
   }
 
   void _updateCustomer(
-      UpdateCustomer event, Emitter<CustomersState> emit) async {
+    UpdateCustomer event,
+    Emitter<CustomersState> emit,
+  ) async {
     try {
       emit(CreatingNewCustomer());
       String userString = await authBox.get(HiveKeys.userBox);
@@ -225,24 +249,26 @@ class CustomersBloc extends Bloc<CustomersEvent, CustomersState> {
       int customer_type = event.customer_type;
 
       final response = await customerRepositoryImpl.updateCustomers(
-          user.orgId!,
-          id,
-          customer_name,
-          customer_address,
-          customer_phone_number,
-          customer_image,
-          customer_active,
-          customer_type,
-          token);
+        user.orgId!,
+        id,
+        customer_name,
+        customer_address,
+        customer_phone_number,
+        customer_image,
+        customer_active,
+        customer_type,
+        token,
+      );
       if (response == null || response.data == null) {
         emit(NewCustomerCreateFailure("No response from server"));
         return;
       }
 
       // Ensure data is always a Map<String, dynamic>
-      final data = response.data['data'] is String
-          ? jsonDecode(response.data['data'])
-          : response.data['data'];
+      final data =
+          response.data['data'] is String
+              ? jsonDecode(response.data['data'])
+              : response.data['data'];
       print(data);
       final Customer customers = Customer.fromJson(data);
 

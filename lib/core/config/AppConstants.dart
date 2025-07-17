@@ -13,4 +13,5 @@ class AppConstants {
     User user = User.fromJson(jsonDecode(userJson));
     return user.role;
   }
+
 }

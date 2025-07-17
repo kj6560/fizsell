@@ -110,7 +110,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   UserAccountsDrawerHeader(
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [Color(0xFFF5F5F5), Color(0xFFB5A13F)],
+                        colors: [Color(0xFFF5F5F5), Colors.teal],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -184,14 +184,6 @@ class _AppDrawerState extends State<AppDrawer> {
                     },
                   ),
                   _buildDrawerItem(
-                    icon: Icons.contact_mail_outlined,
-                    text: 'Contact Us',
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, '/contact_us');
-                    },
-                  ),
-                  _buildDrawerItem(
                     icon: Icons.settings,
                     text: 'Settings',
                     onTap: () {
@@ -199,7 +191,16 @@ class _AppDrawerState extends State<AppDrawer> {
                       Navigator.pushNamed(context, '/settings');
                     },
                   ),
-                  const Divider(),
+
+                  _buildDrawerItem(
+                    icon: Icons.contact_mail_outlined,
+                    text: 'Contact Us',
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/contact_us');
+                    },
+                  ),
+
                   _buildDrawerItem(
                     icon: Icons.logout,
                     text: 'Logout',
@@ -250,11 +251,12 @@ class _AppDrawerState extends State<AppDrawer> {
                     },
                     color: Colors.red,
                   ),
+                  const Divider(color: Colors.black,),
                 ],
               ),
             ),
             const Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(2.0),
               child: Text(
                 AppConstants.companyName,
                 style: TextStyle(
@@ -264,7 +266,7 @@ class _AppDrawerState extends State<AppDrawer> {
               ),
             ),
             const Padding(
-              padding: EdgeInsets.all(5.0),
+              padding: EdgeInsets.all(2.0),
               child: Text(
                 "App Version ${AppConstants.AppVersion}",
                 style: TextStyle(
@@ -315,7 +317,7 @@ class _AppDrawerState extends State<AppDrawer> {
     Color? color,
   }) {
     return ListTile(
-      leading: Icon(icon, color: color ?? Colors.black87),
+      leading: Icon(icon, color: color ?? Colors.black87,size: 22,),
       title: Text(
         text,
         style: TextStyle(

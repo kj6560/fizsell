@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/config/config.dart';
 import '../../../../core/local/hive_constants.dart';
+import '../../../core/config/base_url.dart';
 import '../../../core/routes.dart';
 import '../../../core/widgets/SubscriptionFailure.dart';
 import '../../../core/widgets/base_screen.dart';
@@ -14,7 +15,7 @@ import '../../../core/widgets/base_widget.dart';
 import '../../auth/models/User.dart';
 import '../bloc/scheme_bloc.dart';
 import '../models/scheme_model.dart';
-
+import 'package:fizsell/core/utils/Helpers.dart';
 part 'scheme_list_screen.dart';
 
 class SchemeListController extends StatefulWidget {
@@ -41,7 +42,9 @@ class SchemeListControllerState extends State<SchemeListController> {
     initAuthCred();
     BlocProvider.of<SchemeBloc>(context).add(LoadSchemeList());
   }
-
+  void reset() {
+    BlocProvider.of<SchemeBloc>(context).add(LoadSchemeList());
+  }
   void initAuthCred() async {
     String userJson = authBox.get(HiveKeys.userBox);
     User user = User.fromJson(jsonDecode(userJson));

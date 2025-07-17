@@ -77,19 +77,28 @@ class NewCustomerControllerState extends State<NewCustomerController> {
   }
 
   void createNewCustomer() {
-    var customer_name = customerNameController.text.toString();
-    var customer_address = customerAddressController.text.toString();
-    var customer_phone_number = customerPhoneNumberController.text.toString();
+    var customer_name = customerNameController.text.trim();
+    var customer_address = customerAddressController.text.trim();
+    var customer_phone_number = customerPhoneNumberController.text.trim();
     var customer_active = selectedValue == "YES" ? 1 : 0;
-    var customer_image = _image;
+
+    if (_image == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("No Customer Image selected")),
+      );
+
+    }
+
     BlocProvider.of<CustomersBloc>(context).add(NewCustomerCreate(
-        customer_name: customer_name,
-        customer_address: customer_address,
-        customer_phone_number: customer_phone_number,
-        customer_image: customer_image!,
-        customer_type: int.parse(selectedCustomerType!),
-        customer_active: customer_active));
+      customer_name: customer_name,
+      customer_address: customer_address,
+      customer_phone_number: customer_phone_number,
+      customer_image: _image, // safe now
+      customer_type: int.parse(selectedCustomerType!),
+      customer_active: customer_active,
+    ));
   }
+
 
   @override
   Widget build(BuildContext context) {

@@ -41,7 +41,9 @@ class InventoryListControllerState extends State<InventoryListController> {
     initAuthCred();
     BlocProvider.of<InventoryBloc>(context).add(LoadInventoryList());
   }
-
+  void reset() {
+    BlocProvider.of<InventoryBloc>(context).add(LoadInventoryList());
+  }
   void initAuthCred() async {
     String userJson = authBox.get(HiveKeys.userBox);
     User user = User.fromJson(jsonDecode(userJson));

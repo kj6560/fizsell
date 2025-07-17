@@ -12,8 +12,9 @@ import '../../../core/routes.dart';
 import '../../auth/bloc/auth_bloc.dart';
 import '../../auth/models/User.dart';
 import '../bloc/home_bloc.dart';
-import 'home.dart';
 import 'dart:io';
+
+import 'home.dart';
 
 class HomeController extends StatefulWidget {
   const HomeController({super.key});

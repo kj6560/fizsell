@@ -12,15 +12,18 @@ class SchemeListScreen
       title: "Schemes",
       onFabPressed: () {
         if (controllerState.hasActiveSubscription) {
-          Navigator.popAndPushNamed(context, AppRoutes.newScheme);
-        }else{
+          Navigator.pushNamed(context, AppRoutes.newScheme).then((_) {
+            // Re-fetch the product list when coming back
+            controllerState.reset();
+          });
+        } else {
           showExitConfirmationDialog(context);
         }
       },
       body: BlocConsumer<SchemeBloc, SchemeState>(
         listener: (context, state) {
           // You can add side effects like showing a snackbar here if needed
-          if(state is LoadSchemeListSuccess){
+          if (state is LoadSchemeListSuccess) {
             controllerState.changeSubscriptionStatus(true);
           }
           if (state is SubscriptionFailure) {
@@ -95,39 +98,71 @@ class SchemeListScreen
                                       horizontal: 12,
                                       vertical: 6,
                                     ),
-                                    child: Card(
-                                      elevation: 1,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(16),
-                                      ),
-                                      child: InkWell(
-                                        borderRadius: BorderRadius.circular(16),
-                                        onTap: () {
-                                          Navigator.popAndPushNamed(
-                                            context,
-                                            AppRoutes.schemeDetails,
-                                            arguments: {"scheme_id": scheme.id},
-                                          );
-                                        },
+                                    child: InkWell(
+                                      borderRadius: BorderRadius.circular(16),
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                          context,
+                                          AppRoutes.schemeDetails,
+                                          arguments: {"scheme_id": scheme.id},
+                                        ).then((_) {
+                                          // Re-fetch the product list when coming back
+                                          controllerState.reset();
+                                        });
+                                        ;
+                                      },
+                                      child: Card(
+                                        elevation: 2,
+                                        shadowColor: Colors.black12,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            16,
+                                          ),
+                                        ),
                                         child: Padding(
-                                          padding: const EdgeInsets.all(16.0),
+                                          padding: const EdgeInsets.all(14),
                                           child: Row(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              CircleAvatar(
-                                                radius: 24,
-                                                backgroundColor:
-                                                    Colors.teal.shade100,
-                                                child: Text(
-                                                  "${index + 1}",
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.teal.shade900,
-                                                  ),
+                                              // 👕 Product Image
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                child: Image.network(
+                                                  (scheme
+                                                              .product
+                                                              .images
+                                                              .isNotEmpty &&
+                                                          scheme
+                                                              .product
+                                                              .images[0]
+                                                              .isNotEmpty)
+                                                      ? "$picBaseUrl/${scheme.product.images[0]}"
+                                                      : 'https://via.placeholder.com/60',
+                                                  width: 60,
+                                                  height: 60,
+                                                  fit: BoxFit.cover,
+                                                  errorBuilder: (
+                                                    context,
+                                                    error,
+                                                    stackTrace,
+                                                  ) {
+                                                    return Container(
+                                                      width: 60,
+                                                      height: 60,
+                                                      color: Colors.grey[300],
+                                                      child: const Icon(
+                                                        Icons.broken_image,
+                                                        size: 30,
+                                                      ),
+                                                    );
+                                                  },
                                                 ),
                                               ),
-                                              const SizedBox(width: 16),
+                                              const SizedBox(width: 12),
+
+                                              // 📝 Scheme Info
                                               Expanded(
                                                 child: Column(
                                                   crossAxisAlignment:
@@ -135,21 +170,65 @@ class SchemeListScreen
                                                   children: [
                                                     Text(
                                                       scheme.schemeName,
-                                                      style: TextStyle(
-                                                        fontSize: 18,
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
                                                         fontWeight:
-                                                            FontWeight.bold,
+                                                            FontWeight.w600,
                                                       ),
                                                     ),
-                                                    const SizedBox(height: 6),
+                                                    const SizedBox(height: 4),
                                                     Text(
-                                                      scheme.type,
-                                                      style: TextStyle(
-                                                        fontSize: 15,
-                                                        color: Colors.grey[700],
+                                                      "Type: ${scheme.type}",
+                                                      style: const TextStyle(
+                                                        fontSize: 14,
+                                                        color: Colors.black87,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      "Value: ${scheme.value}",
+                                                      style: const TextStyle(
+                                                        fontSize: 14,
+                                                        color: Colors.black87,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      "Valid: ${formatDate(scheme.startDate)} → ${formatDate(scheme.endDate)}",
+                                                      style: const TextStyle(
+                                                        fontSize: 13,
+                                                        color: Colors.grey,
                                                       ),
                                                     ),
                                                   ],
+                                                ),
+                                              ),
+
+                                              // 🎯 Status
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 6,
+                                                    ),
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      scheme.isActive
+                                                          ? Colors.green[50]
+                                                          : Colors.red[50],
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                child: Text(
+                                                  scheme.isActive
+                                                      ? "Active"
+                                                      : "Inactive",
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    color:
+                                                        scheme.isActive
+                                                            ? Colors.green
+                                                            : Colors.red,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
                                               ),
                                             ],
@@ -158,6 +237,7 @@ class SchemeListScreen
                                       ),
                                     ),
                                   );
+                                  ;
                                 },
                               ),
                     ),

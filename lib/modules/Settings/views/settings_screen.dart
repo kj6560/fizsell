@@ -18,7 +18,6 @@ class SettingsScreen
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-
               ExpansionTile(
                 leading: Icon(Icons.people, color: Colors.teal),
                 title: Text("Users"),
@@ -34,15 +33,14 @@ class SettingsScreen
               ListTile(
                 leading: Icon(Icons.currency_exchange, color: Colors.teal),
                 title: Text("Currency"),
-                subtitle: Text("INR ₹"), // You can dynamically show current currency
+                subtitle: Text("INR ₹"),
+                // You can dynamically show current currency
                 trailing: Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    "/currencySettings"
-                  );
+                  Navigator.pushNamed(context, "/currencySettings");
                 },
               ),
+
             ],
           );
         },

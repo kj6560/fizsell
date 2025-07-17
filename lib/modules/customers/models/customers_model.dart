@@ -38,7 +38,7 @@ class Customer {
       customerName: json["customer_name"],
       customerAddress: json["customer_address"],
       customerPhoneNumber: json["customer_phone_number"],
-      customerPic: json["customer_pic"],
+      customerPic: json["customer_pic"] !=null ?json["customer_pic"]:"",
       customerActive: int.parse(json["customer_active"].toString()),
       customerType: int.parse(json['customer_type']),
       createdAt: json["created_at"],

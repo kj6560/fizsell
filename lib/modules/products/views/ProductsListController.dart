@@ -48,4 +48,8 @@ class ProductsListControllerState extends State<ProductsListController> {
   Widget build(BuildContext context) {
     return ProductsList(this);
   }
+
+  void reset() {
+    BlocProvider.of<ProductBloc>(context).add(LoadProductList());
+  }
 }

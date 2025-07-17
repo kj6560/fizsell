@@ -19,10 +19,6 @@ import 'home_controller.dart';
 class HomePage extends WidgetView<HomePage, HomeControllerState> {
   HomePage(super.controllerState);
 
-  final TextEditingController _searchProductsController =
-      TextEditingController();
-  final TextEditingController searchSalesController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -33,7 +29,6 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
         BlocProvider<ProductBloc>(
           create: (_) => ProductBloc()..add(const LoadProductList()),
         ),
-
       ],
       child: PopScope(
         canPop: false,
@@ -45,11 +40,31 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
           }
         },
         child: BaseScreen(
-          title: AppConstants.appName,
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.only(bottom: 20),
+          title: "Home",
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                const Text(
+                  "Welcome, Keshav 👋",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 24),
+                Expanded(
+                  child: GridView.count(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    children: [
+                      _buildGridItem(Icons.receipt_long, "New Invoice"),
+                      _buildGridItem(Icons.inventory, "Products"),
+                      _buildGridItem(Icons.people, "Customers"),
+                      _buildGridItem(Icons.bar_chart, "Reports"),
+
+                    ],
+                  ),
+                ),
                 BlocConsumer<HomeBloc, HomeState>(
                   listener: (context, state) {
                     if (state is ForceLogout) {
@@ -60,7 +75,7 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
                     if (state is LoadingHome) {
                       return const Center(child: CircularProgressIndicator(color: Colors.red,));
                     } else if (state is LoadSuccess) {
-                      return _buildDashboardCard(state);
+                      return _buildDashboardCard(context,state);
                     } else if (state is LoadFailure) {
                       return Center(child: Text(state.error));
                     }else if(state is SubscriptionFailure){
@@ -72,40 +87,23 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
                     }
                   },
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: const Center(
-                    child: Text(
-                      "Products",
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                const SizedBox(height: 16),
+                Card(
+                  elevation: 1,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text("Today's Sales", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 8),
+                        Text("Total: ₹12,540", style: TextStyle(fontSize: 16)),
+                        Text("Invoices: 8 | Customers: 3", style: TextStyle(fontSize: 14, color: Colors.grey)),
+                      ],
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: BlocConsumer<ProductBloc, ProductState>(
-                    listener: (context, state) {
-                      // You can handle additional product-specific side effects here if needed
-                      print(state);
-                    },
-                    builder: (context, state) {
-                      print("state: ${state}");
-                      if (state is LoadingProductList) {
-                        return const Center(child: CircularProgressIndicator(color: Colors.blue,));
-                      } else if (state is LoadProductSuccess) {
-                        return _buildProductList(state.response);
-                      } else if (state is LoadProductListFailure) {
-                        return Center(child: Text(state.error));
-                      }else if(state is ProductSubscriptionFailure){
-                        return const Center(
-                          child: Text("You don't have an active subscription. Plz contact Admin"),
-                        );
-                      }  else {
-                        return const SizedBox();
-                      }
-                    },
-                  ),
-                ),
+                )
               ],
             ),
           ),
@@ -113,47 +111,65 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
       ),
     );
   }
-
-  Widget _buildDashboardCard(LoadSuccess state) {
-    return Padding(
-      padding: const EdgeInsets.all(18.0),
+  Widget _buildGridItem(IconData icon, String label) {
+    return GestureDetector(
+      onTap: () {},
       child: Container(
-        child: Card(
-          elevation: 1,
-          shadowColor: Color(0xFFB5A13F),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 36, color: Colors.teal[700]),
+            const SizedBox(height: 12),
+            Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
+          ],
+        ),
+      ),
+    );
+  }
+  Widget _buildDashboardCard(var context,LoadSuccess state) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      child: Card(
+        elevation: 1,
+        shadowColor: Color(0xFFB5A13F),
         // border added,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildColumn("Time", ["", "Today", "Monthly", "Total"]),
-                _buildColumn("Products", [
-                  "",
-                  "${state.response.productsData.productsAddedToday}",
-                  "${state.response.productsData.productsAddedThisMonth}",
-                  "${state.response.productsData.productsAddedTotal}",
-                ]),
-                _buildColumn("Inventory", [
-                  "",
-                  "${state.response.inventoryData.inventoryAddedToday}",
-                  "${state.response.inventoryData.inventoryAddedThisMonth}",
-                  "${state.response.inventoryData.inventoryAddedTotal}",
-                ]),
-                _buildColumn("Sales", [
-                  "",
-                  "₹${state.response.salesData.salesToday}",
-                  "₹${state.response.salesData.salesThisMonth}",
-                  "₹${state.response.salesData.salesTotal}",
-                ]),
-              ],
-            ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildColumn("Time", ["", "Today", "Monthly", "Total"]),
+              _buildColumn("Products", [
+                "",
+                "${state.response.productsData.productsAddedToday}",
+                "${state.response.productsData.productsAddedThisMonth}",
+                "${state.response.productsData.productsAddedTotal}",
+              ]),
+              _buildColumn("Inventory", [
+                "",
+                "${state.response.inventoryData.inventoryAddedToday}",
+                "${state.response.inventoryData.inventoryAddedThisMonth}",
+                "${state.response.inventoryData.inventoryAddedTotal}",
+              ]),
+              _buildColumn("Sales", [
+                "",
+                "₹${state.response.salesData.salesToday}",
+                "₹${state.response.salesData.salesThisMonth}",
+                "₹${state.response.salesData.salesTotal}",
+              ]),
+            ],
           ),
         ),
       ),
     );
   }
-
   Widget _buildColumn(String title, List<String> values) {
     return Expanded(
       child: Column(
@@ -171,197 +187,6 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
       ),
     );
   }
-
-  Widget _buildProductList(List<Product> products) {
-    List<Product> filteredProducts = List.from(products);
-
-    return StatefulBuilder(
-      builder: (context, setState) {
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.white60,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFFB5A13F), width: 2),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
-                blurRadius: 6,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Column(
-            children: [
-              // 🔍 Search Box
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: TextField(
-                  controller: _searchProductsController,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.search),
-                    hintText: 'Search by Order ID',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Colors.grey),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Color(0xFFB5A13F)),
-                    ),
-                  ),
-                  onChanged: (query) {
-                    query = query.toLowerCase();
-                    setState(() {
-                      filteredProducts = query.isEmpty
-                          ? List.from(products)
-                          : products.where((product) {
-                        return product.name
-                            .toLowerCase()
-                            .contains(query) ||
-                            product.sku
-                                .toLowerCase()
-                                .contains(query);
-                      }).toList();
-                    });
-                  },
-                ),
-              ),
-
-              // 📦 Product List View (max 3 visible, scrollable)
-              filteredProducts.isEmpty
-                  ? const Padding(
-                padding: EdgeInsets.only(top: 24.0),
-                child: Center(child: Text("No products found")),
-              )
-                  : SizedBox(
-                height: 3 * 115.0, // Approx height for 3 cards
-                child: ListView.builder(
-                  itemCount: filteredProducts.length,
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  itemBuilder: (context, index) {
-                    final product = filteredProducts[index];
-                    return InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          AppRoutes.productDetails,
-                          arguments: {"product_id": product.id},
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 6.0),
-                        child: Card(
-                          elevation: 1,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Row(
-                              children: [
-                                // Product Image
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Image.network(
-                                    (product.images != null &&
-                                        product.images.isNotEmpty &&
-                                        product.images[0].isNotEmpty)
-                                        ? "$picBaseUrl/${product.images[0]}"
-                                        : 'https://via.placeholder.com/80',
-                                    width: 80,
-                                    height: 80,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Container(
-                                        width: 80,
-                                        height: 80,
-                                        color: Colors.grey[300],
-                                        child: const Icon(
-                                          Icons.broken_image,
-                                          size: 40,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                // Product Info
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        product.name,
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 6),
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.qr_code,
-                                            size: 16,
-                                            color: Colors.grey[700],
-                                          ),
-                                          const SizedBox(width: 4),
-                                          const Text(
-                                            "SKU: ",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Text(
-                                              product.sku,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.currency_rupee,
-                                            size: 16,
-                                            color: Colors.green[700],
-                                          ),
-                                          const SizedBox(width: 4),
-                                          Text(
-                                            "${product.productMrp}",
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.green[800],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
   Future<bool> _onBackPressed(BuildContext context) async {
     bool exitApp = await showDialog(
       context: context,

@@ -11,7 +11,6 @@ class InventoryListUi
   Widget build(BuildContext context) {
     return BaseScreen(
       title: "Inventory",
-
       body: BlocConsumer<InventoryBloc, InventoryState>(
         listener: (context, state) {
           if (state is LoadInventorySuccess) {
@@ -25,19 +24,17 @@ class InventoryListUi
         },
         builder: (context, state) {
           if (state is LoadingInventoryList) {
-            return Center(
+            return const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   CircularProgressIndicator(color: Colors.teal),
                   SizedBox(height: 8),
                   Text("Loading..."),
                 ],
               ),
             );
-          }
-          else if (state is LoadInventorySuccess) {
-            // Populate filteredInventory only once
+          } else if (state is LoadInventorySuccess) {
             if (filteredInventory.isEmpty && _searchController.text.isEmpty) {
               filteredInventory = List.from(state.response);
             }
@@ -52,21 +49,19 @@ class InventoryListUi
                       controller: _searchController,
                       decoration: InputDecoration(
                         hintText: "Search inventory...",
-                        prefixIcon: Icon(Icons.search),
+                        prefixIcon: const Icon(Icons.search),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: Colors.grey,
-                          ), // Change this to your desired color
+                          borderSide: const BorderSide(color: Colors.grey),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
                             color: Color(0xFFB5A13F),
-                          ), // Color when focused
+                          ),
                         ),
                       ),
                       onChanged: (query) {
@@ -74,11 +69,12 @@ class InventoryListUi
                         if (query.isEmpty) {
                           filteredInventory = List.from(state.response);
                         } else {
-                          filteredInventory = state.response.where((inventory) {
-                            return inventory.product.name
-                                .toLowerCase()
-                                .contains(query);
-                          }).toList();
+                          filteredInventory =
+                              state.response.where((inventory) {
+                                return inventory.product.name
+                                    .toLowerCase()
+                                    .contains(query);
+                              }).toList();
                         }
                         (context as Element).markNeedsBuild();
                       },
@@ -93,23 +89,69 @@ class InventoryListUi
                         InventoryModel inventory = filteredInventory[index];
                         return InkWell(
                           onTap: () {
-                            Navigator.popAndPushNamed(
+                            Navigator.pushNamed(
                               context,
                               AppRoutes.inventoryDetails,
                               arguments: {"inventory_id": inventory.id},
-                            );
+                            ).then((_) {
+                              // Re-fetch the product list when coming back
+                              controllerState.reset();
+                            });
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 12.0, vertical: 6.0),
+                              horizontal: 12.0,
+                              vertical: 6.0,
+                            ),
                             child: Card(
-                              elevation: 1,
+                              elevation: 2,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(16.0),
-                                child: Text(inventory.product.name),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.inventory_2_outlined,
+                                      color: Colors.teal,
+                                      size: 32,
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            inventory.product.name,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            "SKU: ${inventory.product.sku} | Qty: ${inventory.quantity}",
+                                            style: const TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          if (inventory.product.uom != null)
+                                            Text(
+                                              "UOM: ${inventory.product.uom?.title ?? ''}",
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black54,
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -120,28 +162,30 @@ class InventoryListUi
                 ],
               );
             }
-          }else if(state is InventorySubscriptionFailure){
+          } else if (state is InventorySubscriptionFailure) {
             return const Center(
-              child: Text("You don't have an active subscription. Plz contact Admin"),
+              child: Text(
+                "You don't have an active subscription. Please contact Admin",
+                style: TextStyle(fontSize: 16, color: Colors.black87),
+                textAlign: TextAlign.center,
+              ),
             );
-          }
-          else if (state is LoadInventoryFailure) {
+          } else if (state is LoadInventoryFailure) {
             return Center(
               child: Text(
                 state.error,
-                style: TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.black),
               ),
             );
-          }
-          else {
-            return Center(
+          } else {
+            return const Center(
               child: Text(
                 "No Inventory Data Found",
                 style: TextStyle(color: Colors.black),
               ),
             );
           }
-          return Center(
+          return const Center(
             child: Text(
               "No Inventory Data Found",
               style: TextStyle(color: Colors.black),
@@ -157,13 +201,17 @@ class InventoryListUi
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: Text("Subscription Required"),
-                content: Text(
-                    "You don't have an active subscription. Please contact Admin."),
+                title: const Text("Subscription Required"),
+                content: const Text(
+                  "You don't have an active subscription. Please contact Admin.",
+                ),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    child: Text("OK", style: TextStyle(color: Colors.teal)),
+                    child: const Text(
+                      "OK",
+                      style: TextStyle(color: Colors.teal),
+                    ),
                   ),
                 ],
               );
