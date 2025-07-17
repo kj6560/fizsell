@@ -112,7 +112,6 @@ class ProductsList
                                         // Re-fetch the product list when coming back
                                         controllerState.reset();
                                       });
-                                      ;
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(

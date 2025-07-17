@@ -57,11 +57,25 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
                     children: [
-                      _buildGridItem(Icons.receipt_long, "New Invoice"),
-                      _buildGridItem(Icons.inventory, "Products"),
-                      _buildGridItem(Icons.people, "Customers"),
-                      _buildGridItem(Icons.bar_chart, "Reports"),
-
+                      _buildGridItem(
+                        Icons.receipt_long,
+                        context,
+                        "New Order",
+                        AppRoutes.newSale,
+                      ),
+                      _buildGridItem(
+                        Icons.inventory,
+                        context,
+                        "Products",
+                        AppRoutes.listProduct,
+                      ),
+                      _buildGridItem(
+                        Icons.people,
+                        context,
+                        "Customers",
+                        AppRoutes.listCustomers,
+                      ),
+                      _buildGridItem(Icons.bar_chart, context, "Reports", ""),
                     ],
                   ),
                 ),
@@ -73,37 +87,24 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
                   },
                   builder: (context, state) {
                     if (state is LoadingHome) {
-                      return const Center(child: CircularProgressIndicator(color: Colors.red,));
+                      return const Center(
+                        child: CircularProgressIndicator(color: Colors.red),
+                      );
                     } else if (state is LoadSuccess) {
-                      return _buildDashboardCard(context,state);
+                      return _buildDashboardCard(context, state);
                     } else if (state is LoadFailure) {
                       return Center(child: Text(state.error));
-                    }else if(state is SubscriptionFailure){
+                    } else if (state is SubscriptionFailure) {
                       return Center(
-                        child: Text("You don't have an active subscription. Plz contact Admin"),
+                        child: Text(
+                          "You don't have an active subscription. Plz contact Admin",
+                        ),
                       );
                     } else {
                       return const SizedBox();
                     }
                   },
                 ),
-                const SizedBox(height: 16),
-                Card(
-                  elevation: 1,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text("Today's Sales", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                        SizedBox(height: 8),
-                        Text("Total: ₹12,540", style: TextStyle(fontSize: 16)),
-                        Text("Invoices: 8 | Customers: 3", style: TextStyle(fontSize: 14, color: Colors.grey)),
-                      ],
-                    ),
-                  ),
-                )
               ],
             ),
           ),
@@ -111,15 +112,27 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
       ),
     );
   }
-  Widget _buildGridItem(IconData icon, String label) {
+
+  Widget _buildGridItem(
+    IconData icon,
+    var context,
+    String label,
+    String route,
+  ) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.pushNamed(context, route);
+      },
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
-            BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 4,
+              offset: Offset(0, 2),
+            ),
           ],
         ),
         child: Column(
@@ -133,43 +146,83 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
       ),
     );
   }
-  Widget _buildDashboardCard(var context,LoadSuccess state) {
+
+  Widget _buildDashboardCard(var context, LoadSuccess state) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      child: Card(
-        elevation: 1,
-        shadowColor: Color(0xFFB5A13F),
-        // border added,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildColumn("Time", ["", "Today", "Monthly", "Total"]),
-              _buildColumn("Products", [
-                "",
-                "${state.response.productsData.productsAddedToday}",
-                "${state.response.productsData.productsAddedThisMonth}",
-                "${state.response.productsData.productsAddedTotal}",
-              ]),
-              _buildColumn("Inventory", [
-                "",
-                "${state.response.inventoryData.inventoryAddedToday}",
-                "${state.response.inventoryData.inventoryAddedThisMonth}",
-                "${state.response.inventoryData.inventoryAddedTotal}",
-              ]),
-              _buildColumn("Sales", [
-                "",
-                "₹${state.response.salesData.salesToday}",
-                "₹${state.response.salesData.salesThisMonth}",
-                "₹${state.response.salesData.salesTotal}",
-              ]),
-            ],
+      child: Column(
+        children: [
+          Card(
+            elevation: 1,
+            shadowColor: Color(0xFFB5A13F),
+            // border added,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildColumn("Time", ["", "Today", "Monthly", "Total"]),
+                  _buildColumn("Products", [
+                    "",
+                    "${state.response.productsData.productsAddedToday}",
+                    "${state.response.productsData.productsAddedThisMonth}",
+                    "${state.response.productsData.productsAddedTotal}",
+                  ]),
+                  _buildColumn("Inventory", [
+                    "",
+                    "${state.response.inventoryData.inventoryAddedToday}",
+                    "${state.response.inventoryData.inventoryAddedThisMonth}",
+                    "${state.response.inventoryData.inventoryAddedTotal}",
+                  ]),
+                  _buildColumn("Sales", [
+                    "",
+                    "₹${state.response.salesData.salesToday}",
+                    "₹${state.response.salesData.salesThisMonth}",
+                    "₹${state.response.salesData.salesTotal}",
+                  ]),
+                ],
+              ),
+            ),
           ),
-        ),
+          const SizedBox(height: 16),
+          Card(
+            elevation: 1,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Today's Sales",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      "Total: ₹${state.response.salesData.salesToday}",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    Text(
+                      "Invoices: 8 | Customers: 3",
+                      style: TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
+
   Widget _buildColumn(String title, List<String> values) {
     return Expanded(
       child: Column(
@@ -187,6 +240,7 @@ class HomePage extends WidgetView<HomePage, HomeControllerState> {
       ),
     );
   }
+
   Future<bool> _onBackPressed(BuildContext context) async {
     bool exitApp = await showDialog(
       context: context,
