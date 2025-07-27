@@ -42,4 +42,10 @@ class EndPoints {
   static const String deleteUser = '${baseUrl}/api/deleteUser';
   static const String fetchCurrencies = '${baseUrl}/api/fetchCurrencies';
   static const String setCurrency = '${baseUrl}/api/setCurrency';
+  static const String fetchSubscriptionList =
+      '${baseUrl}/api/fetchSubscriptionList';
+  static const String fetchSubscriptionDetail =
+      '${baseUrl}/api/fetchSubscriptionDetail';
+  static const String createSubscriptionOrder =
+      '${baseUrl}/api/createSubscriptionOrder';
 }

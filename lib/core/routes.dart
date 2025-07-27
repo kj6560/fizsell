@@ -1,4 +1,6 @@
 import 'package:fizsell/modules/Settings/views/currency_settings_controller.dart';
+import 'package:fizsell/modules/Subscriptions/views/SubscriptionDetailController.dart';
+import 'package:fizsell/modules/Subscriptions/views/SubscriptionListController.dart';
 import 'package:flutter/material.dart';
 import 'package:fizsell/modules/ContactUs/views/contact_us_controller.dart';
 import 'package:fizsell/modules/ContactUs/views/contact_us_responses_controller.dart';
@@ -58,6 +60,8 @@ class AppRoutes {
   static const String userList = '/user_list';
   static const String newUser = '/new_user';
   static const String currencySettings = "/currencySettings";
+  static const String subscriptions = "/subscriptions";
+  static const String subscriptionDetail = "/subscriptionDetail";
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -159,6 +163,17 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => NewUserController());
       case currencySettings:
         return MaterialPageRoute(builder: (_) => CurrencySettingsController());
+      case subscriptions:
+        return MaterialPageRoute(builder: (_) => Subscriptionlistcontroller());
+      case subscriptionDetail:
+        return MaterialPageRoute(
+          builder: (context) {
+            final args =
+                settings.arguments as Map<String, dynamic>?; // Get arguments
+            return Subscriptiondetailcontroller(); // Pass arguments if necessary
+          },
+          settings: settings, // Ensure arguments are attached to the route
+        );
       default:
         return MaterialPageRoute(builder: (_) => LoginController());
     }

@@ -22,6 +22,8 @@ class Login extends WidgetView<Login, LoginControllerState> {
                   behavior: SnackBarBehavior.floating,
                 ),
               );
+            }else if(state is SubscriptionFailure){
+              controllerState.buySubscription(state.user);
             }
           },
           builder: (context, state) {

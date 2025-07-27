@@ -1,4 +1,5 @@
 import 'package:fizsell/core/widgets/app_theme.dart';
+import 'package:fizsell/modules/Subscriptions/bloc/subscription_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -18,8 +19,7 @@ import 'modules/inventory/bloc/inventory_bloc.dart';
 import 'modules/orders/bloc/sales_bloc.dart';
 import 'modules/products/bloc/product_bloc.dart';
 
-
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final directory = await getApplicationDocumentsDirectory();
   await Hive.initFlutter(directory.path);
@@ -33,42 +33,68 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) {
-          return AuthBloc();
-        }),
-        BlocProvider(create: (context) {
-          return HomeBloc();
-        }),
-        BlocProvider(create: (context) {
-          return SalesBloc();
-        }),
-        BlocProvider(create: (context) {
-          return InventoryBloc();
-        }),
-        BlocProvider(create: (context) {
-          return ProductBloc();
-        }),
-        BlocProvider(create: (context) {
-          return CustomersBloc();
-        }),
-        BlocProvider(create: (context) {
-          return SchemeBloc();
-        }),
-        BlocProvider(create: (context) {
-          return SettingsBloc();
-        }),
-        BlocProvider(create: (context) {
-          return OrganizationBloc();
-        }),
-        BlocProvider(create: (context) {
-          return ContactUsBloc();
-        }),
-        BlocProvider(create: (context) {
-          return UserBloc();
-        }),
+        BlocProvider(
+          create: (context) {
+            return AuthBloc();
+          },
+        ),
+        BlocProvider(
+          create: (context) {
+            return HomeBloc();
+          },
+        ),
+        BlocProvider(
+          create: (context) {
+            return SalesBloc();
+          },
+        ),
+        BlocProvider(
+          create: (context) {
+            return InventoryBloc();
+          },
+        ),
+        BlocProvider(
+          create: (context) {
+            return ProductBloc();
+          },
+        ),
+        BlocProvider(
+          create: (context) {
+            return CustomersBloc();
+          },
+        ),
+        BlocProvider(
+          create: (context) {
+            return SchemeBloc();
+          },
+        ),
+        BlocProvider(
+          create: (context) {
+            return SettingsBloc();
+          },
+        ),
+        BlocProvider(
+          create: (context) {
+            return OrganizationBloc();
+          },
+        ),
+        BlocProvider(
+          create: (context) {
+            return ContactUsBloc();
+          },
+        ),
+        BlocProvider(
+          create: (context) {
+            return UserBloc();
+          },
+        ),
+        BlocProvider(
+          create: (context) {
+            return SubscriptionBloc();
+          },
+        ),
       ],
       child: MaterialApp(
-
         debugShowCheckedModeBanner: false,
         title: 'FizSell',
         theme: AppTheme.lightTheme,

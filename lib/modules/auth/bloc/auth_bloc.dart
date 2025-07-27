@@ -47,14 +47,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final data =
       response.data is String ? jsonDecode(response.data) : response.data;
       final loginResponse = Response.fromJson(data);
-      print("login response: ${loginResponse.data['user']}");
+
+      if(data['statusCode'] == 202){
+        print("login response: ${loginResponse.data}");
+        final user = User.fromJson(loginResponse.data);
+          emit(SubscriptionFailure(user));
+      }
       if (loginResponse.statusCode == 200 && loginResponse.data != null) {
         final user = User.fromJson(loginResponse.data['user']);
         emit(LoginSuccess(user, loginResponse.data['token']));
-      } else {
+      } else if(data['statusCode'] == 202){
+
+      }else {
         // 🔥 Handle all error messages in one place
         final message = loginResponse.message ?? "Login failed.";
-        print("b");
         emit(LoginFailure(message));
       }
     } catch (e, stacktrace) {
